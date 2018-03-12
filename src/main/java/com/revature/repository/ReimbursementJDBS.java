@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Set;
+import java.util.HashSet;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
@@ -214,12 +215,48 @@ class ReimbursementJDBS implements ReimbursementRepository{
 	}
 	@Override
 	public Set<Reimbursement> selectPending(int employeeId) {
-		// TODO Auto-generated method stub
+		//Will need to join Reimbursement and Reimbursement_Status to easily query all pending Reimbursements
+		
+		try (Connection connection = ConnectionUtil.getConnection()){
+			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
+			String sql = "SELECT * "
+					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
+					+ "WHERE R.R_ID = ? AND R.R_RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, employeeId); 
+			ResultSet results = statement.executeQuery();
+			
+			while(results.next()) {
+				pendingReimbursements.add(parseReimbursementResultSet(results));
+			}
+			
+			return pendingReimbursements;
+			
+		} catch (SQLException e) {
+			logger.error("SQLException on selectPending(employeeId): "+e);
+		}
 		return null;
 	}
 	@Override
 	public Set<Reimbursement> selectFinalized(int employeeId) {
-		// TODO Auto-generated method stub
+		try (Connection connection = ConnectionUtil.getConnection()){
+			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
+			String sql = "SELECT * "
+					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
+					+ "WHERE R.R_ID = ? AND R.R_RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, employeeId); 
+			ResultSet results = statement.executeQuery();
+			
+			while(results.next()) {
+				pendingReimbursements.add(parseReimbursementResultSet(results));
+			}
+			
+			return pendingReimbursements;
+			
+		} catch (SQLException e) {
+			logger.error("SQLException on selectPending(employeeId): "+e);
+		}
 		return null;
 	}
 	@Override
