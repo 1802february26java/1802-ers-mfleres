@@ -60,6 +60,45 @@ class ReimbursementJDBS implements ReimbursementRepository{
 	    return (Object)ois.readObject();
 	}
 	
+	/**
+	 * parses a resultSet from Reimbursement Table and returns the first row as a Reimbursement object.
+	 * @param result
+	 * @return
+	 */
+	private Reimbursement parseReimbursementResultSet(ResultSet result) {
+		try {
+			int id = result.getInt("R_ID");
+			LocalDateTime requested = result.getTimestamp("R_REQUESTED").toLocalDateTime();
+			LocalDateTime resolved = result.getTimestamp("R_RESOLVED").toLocalDateTime();
+			double amount = result.getDouble("R_AMOUNT");
+			String description = result.getString("R_DESCRIPTION");
+			Blob receiptBlob = result.getBlob("R_RECEIPT");
+			int requesterId = result.getInt("EMPLOYEE_ID");
+			int approverId = result.getInt("MANAGER_ID");
+			int statusId = result.getInt("RS_ID");
+			int typeId = result.getInt("RT_ID");
+			
+			//Need to convert data types for receipt, requester, approver, status, and type
+			Object receipt = blobToObject(receiptBlob);
+			ReimbursementStatus  status = queryStatus(statusId);
+			ReimbursementType type = queryType(typeId);
+			Employee requester = EmployeeRepositoryJDBS.getInstance().select(requesterId);
+			Employee approver = EmployeeRepositoryJDBS.getInstance().select(approverId);
+
+			Reimbursement r = new Reimbursement(id, requested, resolved, amount, description, requester, approver, status, type);
+			r.setReceipt(receipt);
+			return r;
+			
+		} catch (SQLException e) {
+			logger.error("SQLException during the reading of the query " + e);
+		} catch (ClassNotFoundException e) {
+			logger.error("ClassNotFoundException, could not determine Object of Blob " + e);
+		} catch (IOException e) {
+			logger.error("IOException on parseReimbursementResultSet(ResultSet) " + e);
+		}
+		return null;
+	}
+	
 	@Override
 	public boolean insert(Reimbursement reimbursement) {
 		try(Connection connection = ConnectionUtil.getConnection()){
@@ -164,35 +203,7 @@ class ReimbursementJDBS implements ReimbursementRepository{
 			ResultSet result = statement.executeQuery();
 			
 			if(result.next()) {
-				try {
-					LocalDateTime requested = result.getTimestamp("R_REQUESTED").toLocalDateTime();
-					LocalDateTime resolved = result.getTimestamp("R_RESOLVED").toLocalDateTime();
-					double amount = result.getDouble("R_AMOUNT");
-					String description = result.getString("R_DESCRIPTION");
-					Blob receiptBlob = result.getBlob("R_RECEIPT");
-					int requesterId = result.getInt("EMPLOYEE_ID");
-					int approverId = result.getInt("MANAGER_ID");
-					int statusId = result.getInt("RS_ID");
-					int typeId = result.getInt("RT_ID");
-					
-					//Need to convert data types for receipt, requester, approver, status, and type
-					Object receipt = blobToObject(receiptBlob);
-					ReimbursementStatus  status = queryStatus(statusId);
-					ReimbursementType type = queryType(typeId);
-					Employee requester = EmployeeRepositoryJDBS.getInstance().select(requesterId);
-					Employee approver = EmployeeRepositoryJDBS.getInstance().select(approverId);
-
-					Reimbursement r = new Reimbursement(reimbursementId, requested, resolved, amount, description, requester, approver, status, type);
-					r.setReceipt(receipt);
-					return r;
-					
-				} catch (SQLException e) {
-					logger.error("SQLException during the reading of the query " + e);
-				} catch (ClassNotFoundException e) {
-					logger.error("ClassNotFoundException, could not determine Object of Blob " + e);
-				} catch (IOException e) {
-					logger.error("IOException on select(reimbursementId " + e);
-				}
+				return parseReimbursementResultSet(result);
 			} else {
 				logger.error("Reimbursement with ID "+reimbursementId+" not found.");
 			}
