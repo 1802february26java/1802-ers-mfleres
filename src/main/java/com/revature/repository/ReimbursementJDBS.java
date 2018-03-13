@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -189,7 +190,7 @@ class ReimbursementJDBS implements ReimbursementRepository{
 		statement.setInt(1, typeId);
 		ResultSet result = statement.executeQuery();
 		if(result.next()) {
-			return new ReimbursementType(typeId, result.getString("RT_STATUS"));
+			return new ReimbursementType(typeId, result.getString("RT_TYPE"));
 		}
 		return null;
 	}
@@ -255,23 +256,69 @@ class ReimbursementJDBS implements ReimbursementRepository{
 			return pendingReimbursements;
 			
 		} catch (SQLException e) {
-			logger.error("SQLException on selectPending(employeeId): "+e);
+			logger.error("SQLException on selectFinalized(employeeId): "+e);
 		}
 		return null;
 	}
 	@Override
 	public Set<Reimbursement> selectAllPending() {
-		// TODO Auto-generated method stub
+		try (Connection connection = ConnectionUtil.getConnection()){
+			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
+			String sql = "SELECT * "
+					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
+					+ "R.R_RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
+			Statement statement = connection.createStatement();
+			ResultSet results = statement.executeQuery(sql);
+			
+			while(results.next()) {
+				pendingReimbursements.add(parseReimbursementResultSet(results));
+			}
+			
+			return pendingReimbursements;
+			
+		} catch (SQLException e) {
+			logger.error("SQLException on selectAllPending(employeeId): "+e);
+		}
 		return null;
 	}
 	@Override
 	public Set<Reimbursement> selectAllFinalized() {
-		// TODO Auto-generated method stub
+		try (Connection connection = ConnectionUtil.getConnection()){
+			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
+			String sql = "SELECT * "
+					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
+					+ "R.R_RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
+			Statement statement = connection.createStatement();
+			ResultSet results = statement.executeQuery(sql);
+			
+			while(results.next()) {
+				pendingReimbursements.add(parseReimbursementResultSet(results));
+			}
+			
+			return pendingReimbursements;
+			
+		} catch (SQLException e) {
+			logger.error("SQLException on selectAllFinalized(employeeId): "+e);
+		}
 		return null;
 	}
 	@Override
 	public Set<ReimbursementType> selectTypes() {
-		// TODO Auto-generated method stub
+		try (Connection connection = ConnectionUtil.getConnection()){
+			HashSet<ReimbursementType> typesSet = new HashSet<>();
+			String sql = "SELECT * FROM REIMBURSEMENT_TYPE";
+			Statement statement = connection.createStatement(); 
+			ResultSet results = statement.executeQuery(sql);
+			while(results.next()) {
+				int id = results.getInt("RT_ID");
+				String type = results.getString("RT_TYPE");
+				typesSet.add(new ReimbursementType(id, type));
+			}
+			return typesSet;
+
+		} catch (SQLException e) {
+			logger.error("SQLException on selectTypes(): "+e);
+		}
 		return null;
 	}
 	
