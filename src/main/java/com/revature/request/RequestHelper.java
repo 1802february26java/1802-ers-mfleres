@@ -43,9 +43,9 @@ public class RequestHelper {
 		switch(request.getRequestURI())
 		{
 		case "/ERS/login.do":
-			return new LoginControllerAlpha().login(request);
+			return LoginControllerAlpha.getInstance().login(request);
 		case "/ERS/logout.do":
-			return new LoginControllerAlpha().logout(request);
+			return LoginControllerAlpha.getInstance().logout(request);
 		default:
 			return new ErrorControllerAlpha().showError(request);
 		}
