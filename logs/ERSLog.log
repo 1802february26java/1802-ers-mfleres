@@ -1,2 +1,21 @@
 2018-03-12 13:33:05 INFO  ConnectionUtil:50 - Connection successful
 2018-03-13 09:24:36 INFO  ConnectionUtil:39 - Connection successful
+2018-03-14 16:48:41 ERROR ConnectionUtil:88 - SQLException in update(Employee)
+2018-03-14 16:49:21 ERROR ConnectionUtil:88 - SQLException in update(Employee)
+2018-03-14 16:50:05 ERROR ConnectionUtil:88 - SQLException in update(Employee)
+2018-03-14 16:50:50 ERROR ConnectionUtil:88 - SQLException in update(Employee)
+2018-03-14 16:54:17 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-14 16:54:17 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-14 16:54:17 ERROR ConnectionUtil:89 - SQLException in update(Employee)
+2018-03-14 16:54:54 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-14 16:54:54 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-14 16:54:54 ERROR ConnectionUtil:89 - SQLException in update(Employee) java.sql.SQLSyntaxErrorException: ORA-00971: missing SET keyword
+
+2018-03-14 16:57:30 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-14 16:57:30 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-14 16:59:03 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-14 16:59:03 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-15 11:58:41 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-15 11:58:41 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-15 11:59:19 TRACE ConnectionUtil:67 - update(Employee); connected
+2018-03-15 11:59:19 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=cat@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]

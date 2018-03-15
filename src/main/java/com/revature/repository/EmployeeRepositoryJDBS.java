@@ -64,7 +64,8 @@ public class EmployeeRepositoryJDBS implements EmployeeRepository{
 			return false;
 		}
 		try(Connection connection = ConnectionUtil.getConnection()){
-			String sql = "UPDATE USER_T "
+			logger.trace("update(Employee); connected");
+			String sql = "UPDATE USER_T SET "
 					+ "U_FIRSTNAME = ?, "
 					+ "U_LASTNAME = ?, "
 					+ "U_USERNAME = ?, "
@@ -81,11 +82,12 @@ public class EmployeeRepositoryJDBS implements EmployeeRepository{
 			statement.setString(++parameterIndex, employee.getEmail());
 			statement.setInt(++parameterIndex, employee.getEmployeeRole().getId());
 			statement.setInt(++parameterIndex, employee.getId());
-			
+			logger.trace("Updating: "+employee);
 			return statement.executeUpdate() > 0;
 			
+			
 		} catch (SQLException e) {
-			logger.error("SQLException in update(Employee)");
+			logger.error("SQLException in update(Employee) "+e);
 		}
 		return false;
 	}
