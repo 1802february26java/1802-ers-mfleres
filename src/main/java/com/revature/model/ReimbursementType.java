@@ -13,7 +13,9 @@ public class ReimbursementType implements Serializable {
 	 * Compatibility with Java 1.x
 	 */
 	private static final long serialVersionUID = -6682033542018508191L;
-
+	public enum Types { OTHER, COURSE, CERTIFICATION, TRAVELING };
+	
+	
 	/**
 	 * PRIMARY KEY
 	 */
@@ -29,6 +31,41 @@ public class ReimbursementType implements Serializable {
 	public ReimbursementType(int id, String type) {
 		this.id = id;
 		this.type = type;
+	}
+	
+	public ReimbursementType(Types type) {
+		this.id = getTypeId(type);
+		this.type = getTypeAsString(type);
+	}
+	
+	private int getTypeId(Types type) {
+		switch(type) {
+		case OTHER:
+			return 1;
+		case COURSE:
+			return 2;
+		case CERTIFICATION:
+			return 3;
+		case TRAVELING:
+			return 4;
+		default:
+			return 0;
+		}
+	}
+	
+	private String getTypeAsString(Types type) {
+		switch(type) {
+		case OTHER:
+			return "OTHER";
+		case COURSE:
+			return "COURSE";
+		case CERTIFICATION:
+			return "CERTIFICATION";
+		case TRAVELING:
+			return "TRAVELING";
+		default:
+			return null;
+		}
 	}
 
 	public int getId() {

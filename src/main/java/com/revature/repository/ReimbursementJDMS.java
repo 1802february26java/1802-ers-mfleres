@@ -27,7 +27,7 @@ import com.revature.model.Reimbursement;
 import com.revature.model.ReimbursementStatus;
 import com.revature.model.ReimbursementType;
 
-class ReimbursementJDBS implements ReimbursementRepository{
+public class ReimbursementJDMS implements ReimbursementRepository{
 	
 	private static Logger logger = Logger.getLogger(ConnectionUtil.class);
 	static {
@@ -37,9 +37,9 @@ class ReimbursementJDBS implements ReimbursementRepository{
 	/**
 	 * Make singleton
 	 */
-	private static ReimbursementJDBS reimbursementjdbs = new ReimbursementJDBS();
-	private ReimbursementJDBS() {}
-	public static ReimbursementJDBS getInstance() {
+	private static ReimbursementJDMS reimbursementjdbs = new ReimbursementJDMS();
+	private ReimbursementJDMS() {}
+	public static ReimbursementJDMS getInstance() {
 		return reimbursementjdbs;
 	}
 	
@@ -84,8 +84,8 @@ class ReimbursementJDBS implements ReimbursementRepository{
 			Object receipt = blobToObject(receiptBlob);
 			ReimbursementStatus  status = queryStatus(statusId);
 			ReimbursementType type = queryType(typeId);
-			Employee requester = EmployeeRepositoryJDBS.getInstance().select(requesterId);
-			Employee approver = EmployeeRepositoryJDBS.getInstance().select(approverId);
+			Employee requester = EmployeeJDBS.getInstance().select(requesterId);
+			Employee approver = EmployeeJDBS.getInstance().select(approverId);
 
 			Reimbursement r = new Reimbursement(id, requested, resolved, amount, description, requester, approver, status, type);
 			r.setReceipt(receipt);

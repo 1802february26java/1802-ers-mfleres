@@ -17,7 +17,7 @@ import com.revature.model.Employee;
 import com.revature.model.EmployeeRole;
 import com.revature.model.EmployeeToken;
 
-public class EmployeeRepositoryJDBS implements EmployeeRepository{
+public class EmployeeJDBS implements EmployeeRepository{
 	
 	private static Logger logger = Logger.getLogger(ConnectionUtil.class);
 	static {
@@ -27,9 +27,9 @@ public class EmployeeRepositoryJDBS implements EmployeeRepository{
 	/**
 	 * Make singleton
 	 */
-	private static EmployeeRepositoryJDBS employeeRepositoryJDBS = new EmployeeRepositoryJDBS();
-	private EmployeeRepositoryJDBS() {}
-	public static EmployeeRepositoryJDBS getInstance() {
+	private static EmployeeJDBS employeeRepositoryJDBS = new EmployeeJDBS();
+	private EmployeeJDBS() {}
+	public static EmployeeJDBS getInstance() {
 		return employeeRepositoryJDBS;
 	}
 
@@ -178,11 +178,20 @@ public class EmployeeRepositoryJDBS implements EmployeeRepository{
 
 	@Override
 	public String getPasswordHash(Employee employee) {
-		if(employee != null) {
-			return employee.getPassword();
-		} else {
-			return null;
-		}
+		try(Connection connection = ConnectionUtil.getConnection()) {
+			int statementIndex = 0;
+			String command = "SELECT GET_HASH(?) AS HASH FROM DUAL";
+			PreparedStatement statement = connection.prepareStatement(command);
+			statement.setString(++statementIndex, employee.getPassword());
+			ResultSet result = statement.executeQuery();
+
+			if(result.next()) {
+				return result.getString("HASH");
+			}
+		} catch (SQLException e) {
+			logger.warn("Exception getting employee hash", e);
+		} 
+		return null;
 	}
 
 	@Override

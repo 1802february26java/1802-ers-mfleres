@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.revature.model.Employee;
 import com.revature.model.EmployeeToken;
+import com.revature.repository.EmployeeJDBS;
 
 public class EmployeeServiceAlpha implements EmployeeService{
 	
@@ -17,61 +18,64 @@ public class EmployeeServiceAlpha implements EmployeeService{
 	
 	@Override
 	public Employee authenticate(Employee employee) {
-		// TODO Auto-generated method stub
+		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getId());
+		String hashedPassword = EmployeeJDBS.getInstance().getPasswordHash(employee);
+		
+		if(loggedEmployee.getPassword().equals(hashedPassword)) {
+			return loggedEmployee;
+		}
 		return null;
 	}
 
 	@Override
 	public Employee getEmployeeInformation(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+		return EmployeeJDBS.getInstance().select(employee.getId());
 	}
 
 	@Override
 	public Set<Employee> getAllEmployeesInformation() {
-		// TODO Auto-generated method stub
-		return null;
+		return EmployeeJDBS.getInstance().selectAll();
 	}
 
 	@Override
 	public boolean createEmployee(Employee employee) {
-		// TODO Auto-generated method stub
-		return false;
+		return EmployeeJDBS.getInstance().insert(employee);
 	}
 
 	@Override
 	public boolean updateEmployeeInformation(Employee employee) {
-		// TODO Auto-generated method stub
-		return false;
+		return EmployeeJDBS.getInstance().update(employee);
 	}
 
 	@Override
 	public boolean updatePassword(Employee employee) {
-		// TODO Auto-generated method stub
-		return false;
+		String hashedPassword = EmployeeJDBS.getInstance().getPasswordHash(employee);
+		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getId());
+		loggedEmployee.setPassword(hashedPassword);
+		return EmployeeJDBS.getInstance().update(loggedEmployee);
 	}
 
 	@Override
 	public boolean isUsernameTaken(Employee employee) {
-		// TODO Auto-generated method stub
-		return false;
+		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getUsername());
+		return loggedEmployee != null;
 	}
 
 	@Override
 	public boolean createPasswordToken(Employee employee) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub (OPTIONAL FEATURE)
 		return false;
 	}
 
 	@Override
 	public boolean deletePasswordToken(EmployeeToken employeeToken) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub (OPTIONAL FEATURE)
 		return false;
 	}
 
 	@Override
 	public boolean isTokenExpired(EmployeeToken employeeToken) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub (OPTIONAL FEATURE)
 		return false;
 	}
 
