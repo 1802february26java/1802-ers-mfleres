@@ -19,3 +19,4 @@
 2018-03-15 11:58:41 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=afleres@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
 2018-03-15 11:59:19 TRACE ConnectionUtil:67 - update(Employee); connected
 2018-03-15 11:59:19 TRACE ConnectionUtil:85 - Updating: Employee [id=20, firstName=Amanda, lastName=Fleres, username=afleres, password=FD37FBE8D83B38928003BEEB2D627BD9, email=cat@gmail.com, userRole=EmployeeRole [id=1, type=EMPLOYEE]]
+2018-03-18 17:47:56 INFO  ConnectionUtil:39 - Connection successful

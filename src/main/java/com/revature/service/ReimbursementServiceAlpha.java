@@ -10,9 +10,9 @@ import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 import com.revature.model.ReimbursementStatus;
 import com.revature.model.ReimbursementType;
-import com.revature.repository.ConnectionUtil;
 import com.revature.repository.EmployeeJDBS;
 import com.revature.repository.ReimbursementJDMS;
+import com.revature.util.ConnectionUtil;
 
 public class ReimbursementServiceAlpha implements ReimbursementService {
 

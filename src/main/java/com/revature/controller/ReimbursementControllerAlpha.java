@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 import com.revature.model.ReimbursementType;
-import com.revature.repository.ConnectionUtil;
 import com.revature.service.ReimbursementService;
 import com.revature.service.ReimbursementServiceAlpha;
+import com.revature.util.ConnectionUtil;
 
 public class ReimbursementControllerAlpha implements ReimbursementController{
 

@@ -26,6 +26,7 @@ import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 import com.revature.model.ReimbursementStatus;
 import com.revature.model.ReimbursementType;
+import com.revature.util.ConnectionUtil;
 
 public class ReimbursementJDMS implements ReimbursementRepository{
 	

@@ -1,4 +1,4 @@
-package com.revature.repository;
+package com.revature.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +17,14 @@ public class ConnectionUtil {
 	private static Logger logger = Logger.getLogger(ConnectionUtil.class);
 	static {
 		logger.setLevel(Level.ALL);
+	}
+	
+	static {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			logger.warn("Exception thrown adding oracle driver.", e);
+		}
 	}
 
 	public static Connection getConnection() throws SQLException {

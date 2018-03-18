@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import com.revature.model.Employee;
 import com.revature.model.EmployeeRole;
 import com.revature.model.EmployeeToken;
+import com.revature.util.ConnectionUtil;
 
 public class EmployeeJDBS implements EmployeeRepository{
 	
