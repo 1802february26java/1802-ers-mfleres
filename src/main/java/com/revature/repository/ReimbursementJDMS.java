@@ -109,7 +109,12 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			int parameterIndex = 0;
 			
 			//Start adding the parameters
-			statement.setInt(++parameterIndex,reimbursement.getId());
+			int reimbursementId = reimbursement.getId();
+			if(reimbursementId < 1) {
+				statement.setNull(++parameterIndex,java.sql.Types.INTEGER);
+			}else {
+				statement.setInt(++parameterIndex,reimbursement.getId());
+			}
 			statement.setTimestamp(++parameterIndex, Timestamp.valueOf(reimbursement.getRequested()));
 			statement.setTimestamp(++parameterIndex, Timestamp.valueOf(reimbursement.getResolved()));
 			statement.setDouble(++parameterIndex, reimbursement.getAmount());

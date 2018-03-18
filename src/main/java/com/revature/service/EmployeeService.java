@@ -20,6 +20,8 @@ public interface EmployeeService {
 	 * Contains the logic of user authentication.
 	 * 
 	 * It returns the employee information if authentication was successful.
+	 * 
+	 * Employee only needs username and password to authenticate.
 	 */
 	public Employee authenticate(Employee employee);
 	

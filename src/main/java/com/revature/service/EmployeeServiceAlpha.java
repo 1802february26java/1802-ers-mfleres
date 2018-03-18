@@ -18,7 +18,7 @@ public class EmployeeServiceAlpha implements EmployeeService{
 	
 	@Override
 	public Employee authenticate(Employee employee) {
-		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getId());
+		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getUsername());
 		String hashedPassword = EmployeeJDBS.getInstance().getPasswordHash(employee);
 		
 		if(loggedEmployee.getPassword().equals(hashedPassword)) {
