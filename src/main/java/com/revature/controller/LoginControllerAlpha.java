@@ -40,16 +40,13 @@ public class LoginControllerAlpha implements LoginController {
 			return "login.html";
 		}else {
 			request.getSession().setAttribute("loggedEmployee", loggedEmployee);
-			if(loggedEmployee.getEmployeeRole().getType().toUpperCase().equals("Manager".toUpperCase())) {
-				return "ManagerHome.html";
-			} else {
-				return "EmployeeHome.html";
-			}
+			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
 		}
 	}
 
 	@Override
 	public String logout(HttpServletRequest request) {
+		request.getSession().invalidate();
 		return "login.html";
 	}
 
