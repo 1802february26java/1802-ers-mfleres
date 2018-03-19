@@ -50,7 +50,7 @@ public class RequestHelper {
 		case "/ERS/logout.do":
 			return LoginControllerAlpha.getInstance().logout(request);
 		default:
-			return new ErrorControllerAlpha().showError(request);
+			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
 		}
 	}
 }

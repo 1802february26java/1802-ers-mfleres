@@ -46,6 +46,8 @@ public class LoginControllerAlpha implements LoginController {
 
 	@Override
 	public String logout(HttpServletRequest request) {
+		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
+		logger.trace("Logging out of Employee: "+loggedEmployee);
 		request.getSession().invalidate();
 		return "login.html";
 	}
