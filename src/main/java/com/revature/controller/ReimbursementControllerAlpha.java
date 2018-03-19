@@ -10,7 +10,9 @@ import org.apache.log4j.Logger;
 
 import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
+import com.revature.model.ReimbursementStatus;
 import com.revature.model.ReimbursementType;
+import com.revature.service.EmployeeServiceAlpha;
 import com.revature.service.ReimbursementService;
 import com.revature.service.ReimbursementServiceAlpha;
 import com.revature.util.ConnectionUtil;
@@ -60,27 +62,92 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 
 	@Override
 	public Object singleRequest(HttpServletRequest request) {
-		// TODO Finish
+		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
+		if(loggedEmployee == null) {
+			logger.error("No employee logged in");
+			return null;
+		}
 		int reimbursementId = (int)request.getAttribute("id");
-		return null;
+		Reimbursement reimbursement = ReimbursementServiceAlpha.getInstance().getSingleRequest(new Reimbursement(reimbursementId, null, null, 0.0, null, null, null, null, null));
+		
+		if(reimbursement == null){
+			logger.error("Reimbursement not found");
+			return null;
+		} else if(loggedEmployee.getEmployeeRole().getType() != "MANAGER" && reimbursement.getRequester().getId() != loggedEmployee.getId()) {
+			logger.error("Insufficient permissions to view reimbursement");
+			return null;
+		}
+		
+		return reimbursement;
 	}
 
 	@Override
 	public Object multipleRequests(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		Employee loggedEmployee = (Employee) request.getSession().getAttribute("loggedEmployee");
+		String reimbursementStatus = (String) request.getAttribute("status");
+		if(loggedEmployee == null) {
+			logger.error("No employee logged in");
+			return null;
+		}
+		if(reimbursementStatus == null || !reimbursementStatus.equals("PENDING") || !reimbursementStatus.equals("RESOLVED")) {
+			logger.error("Invalid status request.");
+			return null;
+		}
+		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
+		if(loggedEmployee.getEmployeeRole().getId() == 2) {
+			//Manager views all requests
+			
+			if(reimbursementStatus.equals("PENDING")) {
+				logger.trace("returning all pending requests");
+				return ReimbursementServiceAlpha.getInstance().getAllPendingRequests();
+			}
+			else {
+				logger.trace("returning all resolved requests");
+				return ReimbursementServiceAlpha.getInstance().getAllResolvedRequests();
+			}
+		} else {
+			//Employee only views their requests
+			
+			if(reimbursementStatus.equals("PENDING")) {
+				logger.trace("returning all pending requests for employee");
+				return ReimbursementServiceAlpha.getInstance().getUserPendingRequests(loggedEmployee);
+			}
+			else {
+				logger.trace("returning all resolved requests for employee");
+				return ReimbursementServiceAlpha.getInstance().getUserFinalizedRequests(loggedEmployee);
+			}
+		}
 	}
 
 	@Override
 	public Object finalizeRequest(HttpServletRequest request) {
-		// TODO Auto-generated method stub
+		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
+		Integer reimbursementID = (Integer)request.getAttribute("reimbursementId");
+		String reimbursementStatusType = (String)request.getAttribute("reimbursementStatus");
+		if(loggedEmployee == null) {
+			logger.error("No employee logged in");
+			return null;
+		} else if(reimbursementID == null) {
+			logger.error("No reimbursement id inputted as parameter");
+			return null;
+		} else if (reimbursementStatusType == null || (!reimbursementStatusType.toUpperCase().equals("APPROVED") && !reimbursementStatusType.toUpperCase().equals("DECLINED"))) {
+			logger.error("Invalid reimbursment status");
+			return null;
+		}
+		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
+		Reimbursement reimbursement = ReimbursementServiceAlpha.getInstance().getSingleRequest(new Reimbursement(reimbursementID, null, null, 0, null, null, null, null, null));
+		if(loggedEmployee.getEmployeeRole().getId() == 2) {
+			//Only manager can finalize
+			reimbursement.setApprover(loggedEmployee);
+			reimbursement.setStatus(new ReimbursementStatus(reimbursementStatusType.toUpperCase()));
+			ReimbursementServiceAlpha.getInstance().finalizeRequest(reimbursement);
+		}
 		return null;
 	}
 
 	@Override
 	public Object getRequestTypes(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		return ReimbursementServiceAlpha.getInstance().getReimbursementTypes();
 	}
 
 }

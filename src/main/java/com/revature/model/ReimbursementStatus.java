@@ -14,6 +14,8 @@ public class ReimbursementStatus implements Serializable {
 	 */
 	private static final long serialVersionUID = 7006265099284488241L;
 
+	public enum Status {PENDING,DECLINED,APPROVED}
+	
 	/**
 	 * PRIMARY KEY
 	 */
@@ -24,12 +26,48 @@ public class ReimbursementStatus implements Serializable {
 	 * Initial data: PENDING, APPROVED, DECLINED.
 	 */
 	private String status;
-
+	
 	public ReimbursementStatus() {}
 	
 	public ReimbursementStatus(int id, String status) {
 		this.id = id;
 		this.status = status;
+	}
+	
+	public ReimbursementStatus(Status status) {
+		switch(status) {
+		case PENDING:
+			this.id = 1;
+			this.status ="PENDING";
+			break;
+		case DECLINED:
+			this.id = 2;
+			this.status = "DECLINED";
+			break;
+		case APPROVED:
+			this.id = 3;
+			this.status = "APPROVED";
+		}
+	}
+	
+	public ReimbursementStatus(String status) {
+		switch(status.toUpperCase()) {
+		case "PENDING":
+			this.id = 1;
+			this.status ="PENDING";
+			break;
+		case "DECLINED":
+			this.id = 2;
+			this.status = "DECLINED";
+			break;
+		case "APPROVED":
+			this.id = 3;
+			this.status = "APPROVED";
+			break;
+		default:
+			this.id = 1;
+			this.status = "PENDING";
+		}
 	}
 
 	public int getId() {
