@@ -28,6 +28,7 @@ public class LoginControllerAlpha implements LoginController {
 	@Override
 	public String login(HttpServletRequest request) {
 		if(request.getMethod() == "GET") {
+			logger.trace("login->GET");
 			return "login.html";
 		}
 		logger.trace("LoginController: logging in...");
@@ -37,9 +38,11 @@ public class LoginControllerAlpha implements LoginController {
 		Employee loggedEmployee = EmployeeServiceAlpha.getInstance().authenticate(
 			new Employee(0, null, null, username, password, null, null));
 		if(loggedEmployee == null) {
+			logger.trace("login->loggedEmployee == null");
 			return "login.html";
 		}else {
 			request.getSession().setAttribute("loggedEmployee", loggedEmployee);
+			logger.trace("Logged into "+loggedEmployee);
 			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
 		}
 	}
@@ -48,6 +51,7 @@ public class LoginControllerAlpha implements LoginController {
 	public String logout(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
 		logger.trace("Logging out of Employee: "+loggedEmployee);
+		request.getSession().setAttribute("loggedEmployee", null);
 		request.getSession().invalidate();
 		return "login.html";
 	}

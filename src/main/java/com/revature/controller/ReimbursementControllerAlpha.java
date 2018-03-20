@@ -89,7 +89,7 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 			logger.error("No employee logged in");
 			return null;
 		}
-		if(reimbursementStatus == null || !reimbursementStatus.equals("PENDING") || !reimbursementStatus.equals("RESOLVED")) {
+		if(reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || !reimbursementStatus.equals("RESOLVED"))) {
 			logger.error("Invalid status request.");
 			return null;
 		}

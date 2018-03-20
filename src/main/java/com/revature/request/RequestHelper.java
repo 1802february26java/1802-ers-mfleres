@@ -2,9 +2,16 @@ package com.revature.request;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.revature.controller.EmployeeInformationController;
+import com.revature.controller.EmployeeInformationControllerAlpha;
 import com.revature.controller.ErrorControllerAlpha;
 import com.revature.controller.HomeControllerAlpha;
 import com.revature.controller.LoginControllerAlpha;
+import com.revature.controller.ReimbursementControllerAlpha;
+import com.revature.util.ConnectionUtil;
 
 /**
  * The RequestHelper class is consulted by the MasterServlet and provides
@@ -19,6 +26,11 @@ import com.revature.controller.LoginControllerAlpha;
  */
 public class RequestHelper {
 	private static RequestHelper requestHelper;
+	//logger
+	private static Logger logger = Logger.getLogger(ConnectionUtil.class);
+	static {
+		logger.setLevel(Level.ALL);
+	}
 
 	private RequestHelper() {}
 
@@ -44,12 +56,23 @@ public class RequestHelper {
 		switch(request.getRequestURI())
 		{
 		case "/ERS/home.do":
+			logger.trace("RequestHelper: home.do");
 			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
 		case "/ERS/login.do":
+			logger.trace("RequestHelper: login.do");
 			return LoginControllerAlpha.getInstance().login(request);
 		case "/ERS/logout.do":
+			logger.trace("RequestHelper: logout.do");
 			return LoginControllerAlpha.getInstance().logout(request);
+		case "/ERS/viewAll.do":
+			logger.trace("RequestHelper: viewAll.do");
+			return EmployeeInformationControllerAlpha.getInstance().viewAllEmployees(request);
+		case "/ERS/viewPending.do":
+			logger.trace("RequestHelper: viewPending.do");
+			request.setAttribute("status", "PENDING");
+			return ReimbursementControllerAlpha.getInstance().multipleRequests(request);
 		default:
+			logger.trace("RequestHelper: default");
 			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
 		}
 	}

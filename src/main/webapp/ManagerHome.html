@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-        <title>Manager Home</title>
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-           
-        <!-- Boostrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-        
-        <!-- Boostrap JS -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<meta charset="ISO-8859-1">
+    <title>Manager Home</title>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Boostrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <!-- Boostrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function viewAll() {
+            return {
+                result: com.revature.controller.EmployeeInformationControllerAlpha.getInstance().viewAllEmployees()
+            };
+        }
+    </script>
+    <meta charset="ISO-8859-1">
 </head>
+
 <body>
-<h1>Manager Home</h1>
-<div>
-    <form action="logout.do" method="POST">
+    <h1>Manager Home</h1>
+    <div>
         <div>
-            <button id="logout" class="btn" action="logout.do">Logout</button>
+            <a id="logout" class="btn" href="logout.do">Logout</a>
         </div>
-    </form>
-</div>
+        <div>
+            <a href="viewAll.do">View All Employees</a>
+        </div>
+        <div>
+            <a href="viewPending.do">View Pending Reimbursements</a>
+        </div>>
+        <p id="employeeList"></p>
+
+    </div>
 </body>
+
 </html>
