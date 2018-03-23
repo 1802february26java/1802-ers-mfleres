@@ -16,6 +16,7 @@ import com.revature.service.EmployeeServiceAlpha;
 import com.revature.service.ReimbursementService;
 import com.revature.service.ReimbursementServiceAlpha;
 import com.revature.util.ConnectionUtil;
+import com.revature.util.GlobalVars;
 
 public class ReimbursementControllerAlpha implements ReimbursementController{
 
@@ -85,13 +86,14 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 	public Object multipleRequests(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee) request.getSession().getAttribute("loggedEmployee");
 		String reimbursementStatus = (String) request.getAttribute("status");
+		logger.trace("reimbursement status: "+reimbursementStatus);
 		if(loggedEmployee == null) {
 			logger.error("No employee logged in");
-			return null;
+			return GlobalVars.NO_EMPLOYEE;
 		}
 		if(reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || !reimbursementStatus.equals("RESOLVED"))) {
 			logger.error("Invalid status request.");
-			return null;
+			return GlobalVars.INVALID_REQUEST;
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
 		if(loggedEmployee.getEmployeeRole().getId() == 2) {

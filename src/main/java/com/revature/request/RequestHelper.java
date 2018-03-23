@@ -64,13 +64,13 @@ public class RequestHelper {
 		case "/ERS/logout.do":
 			logger.trace("RequestHelper: logout.do");
 			return LoginControllerAlpha.getInstance().logout(request);
-		case "/ERS/viewAll.do":
-			logger.trace("RequestHelper: viewAll.do");
-			return EmployeeInformationControllerAlpha.getInstance().viewAllEmployees(request);
 		case "/ERS/viewPending.do":
 			logger.trace("RequestHelper: viewPending.do");
 			request.setAttribute("status", "PENDING");
 			return ReimbursementControllerAlpha.getInstance().multipleRequests(request);
+		case "/ERS/viewAll.do":
+			logger.trace("RequestHelper: viewAll.do");
+			return EmployeeInformationControllerAlpha.getInstance().viewAllEmployees(request);
 		default:
 			logger.trace("RequestHelper: default");
 			return HomeControllerAlpha.getInstance().showEmployeeHome(request);

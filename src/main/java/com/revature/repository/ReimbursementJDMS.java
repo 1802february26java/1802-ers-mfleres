@@ -45,6 +45,9 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 	}
 	
 	public static Blob objectToBlob(Object o) throws IOException, SerialException, SQLException {
+		if(o == null) {
+			return null;
+		}
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(byteStream);
 		oos.writeObject(o);
@@ -53,6 +56,9 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 	}
 	
 	public static Object blobToObject(Blob b) throws SQLException, IOException, ClassNotFoundException {
+		if(b == null) {
+			return null;
+		}
 		long blobLength = b.length();
 		if(blobLength > Integer.MAX_VALUE) {
 			return null;
@@ -72,7 +78,12 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 		try {
 			int id = result.getInt("R_ID");
 			LocalDateTime requested = result.getTimestamp("R_REQUESTED").toLocalDateTime();
-			LocalDateTime resolved = result.getTimestamp("R_RESOLVED").toLocalDateTime();
+			LocalDateTime resolved;
+			if(result.getTimestamp("R_RESOLVED") == null) {
+				resolved = null;
+			} else {
+				resolved = result.getTimestamp("R_RESOLVED").toLocalDateTime();
+			}
 			double amount = result.getDouble("R_AMOUNT");
 			String description = result.getString("R_DESCRIPTION");
 			Blob receiptBlob = result.getBlob("R_RECEIPT");
@@ -228,7 +239,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
-					+ "WHERE R.R_ID = ? AND R.R_RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
+					+ "WHERE R.R_ID = ? AND R.RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, employeeId); 
 			ResultSet results = statement.executeQuery();
@@ -272,7 +283,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
-					+ "R.R_RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
+					+ "WHERE R.RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
 			Statement statement = connection.createStatement();
 			ResultSet results = statement.executeQuery(sql);
 			
@@ -283,7 +294,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			return pendingReimbursements;
 			
 		} catch (SQLException e) {
-			logger.error("SQLException on selectAllPending(employeeId): "+e);
+			logger.error("SQLException on selectAllPending(): "+e);
 		}
 		return null;
 	}
@@ -293,7 +304,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
-					+ "R.R_RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
+					+ "WHERE R.R_RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
 			Statement statement = connection.createStatement();
 			ResultSet results = statement.executeQuery(sql);
 			
