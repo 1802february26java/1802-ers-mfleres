@@ -29,7 +29,12 @@ public class EmployeeServiceAlpha implements EmployeeService{
 
 	@Override
 	public Employee getEmployeeInformation(Employee employee) {
-		return EmployeeJDBS.getInstance().select(employee.getId());
+		Employee selectedEmployee = EmployeeJDBS.getInstance().select(employee.getId());
+		if(selectedEmployee != null) {
+			return selectedEmployee;
+		} else {
+			return EmployeeJDBS.getInstance().select(employee.getUsername());
+		}
 	}
 
 	@Override

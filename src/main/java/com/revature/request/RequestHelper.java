@@ -53,6 +53,7 @@ public class RequestHelper {
 	 * forwarded, or data (any object) for AJAX requests.
 	 */
 	public Object process(HttpServletRequest request) {
+		request.setAttribute("status", null);
 		switch(request.getRequestURI())
 		{
 		case "/ERS/home.do":

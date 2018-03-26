@@ -86,14 +86,23 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 	public Object multipleRequests(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee) request.getSession().getAttribute("loggedEmployee");
 		String reimbursementStatus = (String) request.getAttribute("status");
-		Integer desiredEmployeeId = (Integer) request.getAttribute("employeeId");
+		logger.trace("eployeeParam: "+request.getParameter("employeeId"));	
+		Employee desiredEmployee;
+		try {
+			Integer desiredEmployeeId = Integer.valueOf(request.getParameter("employeeId"));
+			desiredEmployee = new Employee(desiredEmployeeId, null, null, null, null, null, null);
+			desiredEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(desiredEmployee);
+		} catch (NumberFormatException e) {
+			desiredEmployee = new Employee(0, null, null, request.getParameter("employeeId"), null, null, null);
+			desiredEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(desiredEmployee);
+		}
 		logger.trace("reimbursement status: "+reimbursementStatus);
-		logger.trace("desiredEmployeeId: "+ desiredEmployeeId);
+		logger.trace("desiredEmployee: "+ desiredEmployee);
 		if(loggedEmployee == null) {
 			logger.error("No employee logged in");
 			return GlobalVars.NO_EMPLOYEE;
 		}
-		if((desiredEmployeeId == null) && (reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || reimbursementStatus.equals("RESOLVED")))) {
+		if((desiredEmployee == null) && (reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || reimbursementStatus.equals("RESOLVED")))) {
 			logger.error("Invalid status request.");
 			return GlobalVars.INVALID_REQUEST;
 		}
@@ -110,8 +119,7 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 					return ReimbursementServiceAlpha.getInstance().getAllResolvedRequests();
 				}
 			} else {
-				Employee desiredEmployee = new Employee(desiredEmployeeId, null, null, null, null, null, null);
-				desiredEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(desiredEmployee);
+				logger.trace(desiredEmployee);
 				Set<Reimbursement> employeeRequests = ReimbursementServiceAlpha.getInstance().getUserPendingRequests(desiredEmployee);
 				Set<Reimbursement> resolvedRequests = ReimbursementServiceAlpha.getInstance().getUserFinalizedRequests(desiredEmployee);
 				employeeRequests.addAll(resolvedRequests);

@@ -28,7 +28,7 @@ public interface EmployeeService {
 	/**
 	 * Returns information of a specific employee.
 	 * 
-	 * The parameter should at least contain the employee id.
+	 * The parameter should at least contain the employee id (ADDED: OR EMPLOYEE USERNAME).
 	 */
 	public Employee getEmployeeInformation(Employee employee);
 	

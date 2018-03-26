@@ -239,7 +239,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
-					+ "WHERE R.R_ID = ? AND R.RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
+					+ "WHERE R.EMPLOYEE_ID = ? AND R.RS_ID = RS.RS_ID AND RS.RS_STATUS = 'PENDING'";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, employeeId); 
 			ResultSet results = statement.executeQuery();
@@ -261,7 +261,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R INNER JOIN REIMBURSEMENT_STATUS RS "
-					+ "ON R.R_ID = ? AND R.RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
+					+ "ON R.EMPLOYEE_ID = ? AND R.RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, employeeId); 
 			ResultSet results = statement.executeQuery();

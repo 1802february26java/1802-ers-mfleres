@@ -1,6 +1,7 @@
 window.onload = () => {
     document.getElementById("viewPending").addEventListener("click", viewPendingReimbursements);
     document.getElementById("viewResolved").addEventListener("click", viewResolvedReimbursements);
+    document.getElementById("viewEmployeeById").addEventListener("click", viewEmployeeReimbursementsById);
 }
 
 function viewPendingReimbursements() {
@@ -45,9 +46,12 @@ function viewResolvedReimbursements() {
     xhr.send();
 }
 
-function viewEmployeeReimbursements(employeeId) {
-    if (employeeId != 0) {
-        console.log("viewEmployeeReimbursements, id = " + employeeId);
+// Could not get in-line employee selection to work
+function viewEmployeeReimbursementsById() {
+    requesterId = document.getElementById("employeeInfo").value;
+    console.log(`requesterId: ${requesterId}`);
+    if (requesterId != null) {
+        console.log("viewEmployeeReimbursements, id = " + requesterId);
         //AJAX
         let xhr = new XMLHttpRequest();
 
@@ -62,7 +66,7 @@ function viewEmployeeReimbursements(employeeId) {
             }
         };
 
-        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${employeeId}`);
+        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}`);
 
         xhr.send();
     }
@@ -119,7 +123,7 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, description);
 
             //Requester
-            createRequesterNodeOnTableRow(reimbursementRow, `${reimbursement.requester.username}`,reimbursement.requester.id);
+            createNodeOnTableRow(reimbursementRow, `${reimbursement.requester.username}`);
 
             //Skipping the receipt blob for now...
 
@@ -150,10 +154,11 @@ function createNodeOnTableRow(rowElement, dataText) {
     rowElement.appendChild(reimbursementDataNode);
 }
 
-function createRequesterNodeOnTableRow(rowElement, dataText, requesterId) {
+function createRequesterNodeOnTableRow(rowElement, dataText, employeeId) {
     let reimbursementDataNode = document.createElement("td");
     let anchorNode = document.createElement("a");
-    anchorNode.addEventListener("click", () => {viewEmployeeReimbursements(requesterId)});
+    anchorNode.setAttribute("employeeId",employeeId);
+    anchorNode.addEventListener("click",function(e) {viewEmployeeReimbursements(employeeId)});
     let reimbursementDataNodeText = document.createTextNode(dataText);
     anchorNode.appendChild(reimbursementDataNodeText);
     reimbursementDataNode.appendChild(anchorNode);
