@@ -43,7 +43,7 @@ public class LoginControllerAlpha implements LoginController {
 		}else {
 			request.getSession().setAttribute("loggedEmployee", loggedEmployee);
 			logger.trace("Logged into "+loggedEmployee);
-			return HomeControllerAlpha.getInstance().showEmployeeHome(request);
+			return "home.do";
 		}
 	}
 

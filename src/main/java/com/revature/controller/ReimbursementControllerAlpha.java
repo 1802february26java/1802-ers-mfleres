@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.revature.ajax.ClientMessage;
 import com.revature.model.Employee;
 import com.revature.model.Reimbursement;
 import com.revature.model.ReimbursementStatus;
@@ -100,11 +101,11 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 		logger.trace("desiredEmployee: "+ desiredEmployee);
 		if(loggedEmployee == null) {
 			logger.error("No employee logged in");
-			return GlobalVars.NO_EMPLOYEE;
+			return new ClientMessage(GlobalVars.NO_EMPLOYEE);
 		}
 		if((desiredEmployee == null) && (reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || reimbursementStatus.equals("RESOLVED")))) {
 			logger.error("Invalid status request.");
-			return GlobalVars.INVALID_REQUEST;
+			return new ClientMessage(GlobalVars.INVALID_REQUEST);
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
 		if(loggedEmployee.getEmployeeRole().getId() == 2) {

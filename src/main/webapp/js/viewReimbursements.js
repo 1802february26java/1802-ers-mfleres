@@ -79,6 +79,8 @@ function presentReimbursements(data) {
         var errorMessage = data.message;
         document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center">${errorMessage}</span>`;
     } else {
+        //Clear Error Message
+        document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center"></span>`
         //Display table of all reimbursements
         let reimbursementTable = document.getElementById("table");
 
