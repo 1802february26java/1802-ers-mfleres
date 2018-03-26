@@ -86,26 +86,36 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 	public Object multipleRequests(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee) request.getSession().getAttribute("loggedEmployee");
 		String reimbursementStatus = (String) request.getAttribute("status");
+		Integer desiredEmployeeId = (Integer) request.getAttribute("employeeId");
 		logger.trace("reimbursement status: "+reimbursementStatus);
+		logger.trace("desiredEmployeeId: "+ desiredEmployeeId);
 		if(loggedEmployee == null) {
 			logger.error("No employee logged in");
 			return GlobalVars.NO_EMPLOYEE;
 		}
-		if(reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || !reimbursementStatus.equals("RESOLVED"))) {
+		if((desiredEmployeeId == null) && (reimbursementStatus == null || !(reimbursementStatus.equals("PENDING") || reimbursementStatus.equals("RESOLVED")))) {
 			logger.error("Invalid status request.");
 			return GlobalVars.INVALID_REQUEST;
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
 		if(loggedEmployee.getEmployeeRole().getId() == 2) {
-			//Manager views all requests
-			
-			if(reimbursementStatus.equals("PENDING")) {
-				logger.trace("returning all pending requests");
-				return ReimbursementServiceAlpha.getInstance().getAllPendingRequests();
-			}
-			else {
-				logger.trace("returning all resolved requests");
-				return ReimbursementServiceAlpha.getInstance().getAllResolvedRequests();
+			if(reimbursementStatus != null) {
+				//Manager views all requests
+				if(reimbursementStatus.equals("PENDING")) {
+					logger.trace("returning all pending requests");
+					return ReimbursementServiceAlpha.getInstance().getAllPendingRequests();
+				}
+				else {
+					logger.trace("returning all resolved requests");
+					return ReimbursementServiceAlpha.getInstance().getAllResolvedRequests();
+				}
+			} else {
+				Employee desiredEmployee = new Employee(desiredEmployeeId, null, null, null, null, null, null);
+				desiredEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(desiredEmployee);
+				Set<Reimbursement> employeeRequests = ReimbursementServiceAlpha.getInstance().getUserPendingRequests(desiredEmployee);
+				Set<Reimbursement> resolvedRequests = ReimbursementServiceAlpha.getInstance().getUserFinalizedRequests(desiredEmployee);
+				employeeRequests.addAll(resolvedRequests);
+				return employeeRequests;
 			}
 		} else {
 			//Employee only views their requests

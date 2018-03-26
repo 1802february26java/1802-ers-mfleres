@@ -304,7 +304,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 			HashSet<Reimbursement> pendingReimbursements = new HashSet<>();
 			String sql = "SELECT * "
 					+ "FROM REIMBURSEMENT R, REIMBURSEMENT_STATUS RS "
-					+ "WHERE R.R_RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
+					+ "WHERE R.RS_ID = RS.RS_ID AND (RS.RS_STATUS = 'APPROVED' OR RS.RS_STATUS = 'DECLINED')";
 			Statement statement = connection.createStatement();
 			ResultSet results = statement.executeQuery(sql);
 			

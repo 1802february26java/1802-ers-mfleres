@@ -68,6 +68,13 @@ public class RequestHelper {
 			logger.trace("RequestHelper: viewPending.do");
 			request.setAttribute("status", "PENDING");
 			return ReimbursementControllerAlpha.getInstance().multipleRequests(request);
+		case "/ERS/viewResolved.do":
+			logger.trace("RequestHelper: viewResolved.do");
+			request.setAttribute("status", "RESOLVED");
+			return ReimbursementControllerAlpha.getInstance().multipleRequests(request);
+		case "/ERS/viewEmployeeReimbursements.do":
+			logger.trace("RequestHelper: viewEmployeeReimbursements.do");
+			return ReimbursementControllerAlpha.getInstance().multipleRequests(request);
 		case "/ERS/viewAll.do":
 			logger.trace("RequestHelper: viewAll.do");
 			return EmployeeInformationControllerAlpha.getInstance().viewAllEmployees(request);
