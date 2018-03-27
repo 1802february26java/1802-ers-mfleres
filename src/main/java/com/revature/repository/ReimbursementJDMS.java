@@ -150,7 +150,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 	@Override
 	public boolean update(Reimbursement reimbursement) {
 		try(Connection connection = ConnectionUtil.getConnection()){
-			String sql = "UPDATE REIMBURSEMENT " +
+			String sql = "UPDATE REIMBURSEMENT SET " +
 					"R_REQUESTED= ?, " + 
 					"R_RESOLVED = ?, " + 
 					"R_AMOUNT = ?, " + 
@@ -160,7 +160,7 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 					"MANAGER_ID = ?, " + 
 					"RS_ID = ?, " + 
 					"RT_ID = ? " +
-					"WHERE R_ID = ?;";
+					"WHERE R_ID = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
 			//UPDATE ALL COLUMNS

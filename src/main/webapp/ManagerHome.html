@@ -33,12 +33,18 @@
                 <input id="employeeInfo" placeholder="Employee Search">
                 <button id="viewEmployeeById">Search</button>
             </div>
+            <div id="ApproveDenyReimbursement">
+                <input id="reimbursementId" placeholder="ID">
+                <button id="approveButton" class="btn btn-success">Approve</button>
+                <button id="declineButton" class="btn btn-danger">Decline</button>
+            </div>
         </div>
-        <div id="listMessage"></div>
+        <div id="listMessage"><span></span></div>
         <table id="table" class="table table-striped"></table>
 
     </div>
     <script src="js/viewReimbursements.js"></script>
+    <script src="js/resolveReimbursement.js"></script>
 </body>
 
 </html>

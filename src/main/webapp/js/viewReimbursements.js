@@ -1,4 +1,5 @@
-window.onload = () => {
+function viewOnLoad() {
+    console.log("viewOnLoad");
     document.getElementById("viewPending").addEventListener("click", viewPendingReimbursements);
     document.getElementById("viewResolved").addEventListener("click", viewResolvedReimbursements);
     document.getElementById("viewEmployeeById").addEventListener("click", viewEmployeeReimbursementsById);
@@ -10,7 +11,7 @@ function viewPendingReimbursements() {
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
-        console.log(`${xhr.readyState},${xhr.status}`)
+        console.log(`${xhr.readyState},${xhr.status}`);
         if (xhr.readyState === 4 && xhr.status === 200) {
             let data = JSON.parse(xhr.responseText);
             console.log(data);

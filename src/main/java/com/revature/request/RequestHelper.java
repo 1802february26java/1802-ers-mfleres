@@ -79,6 +79,8 @@ public class RequestHelper {
 		case "/ERS/viewAll.do":
 			logger.trace("RequestHelper: viewAll.do");
 			return EmployeeInformationControllerAlpha.getInstance().viewAllEmployees(request);
+		case "/ERS/resolveReimbursement.do":
+			return ReimbursementControllerAlpha.getInstance().finalizeRequest(request);
 		default:
 			logger.trace("RequestHelper: default");
 			return HomeControllerAlpha.getInstance().showEmployeeHome(request);

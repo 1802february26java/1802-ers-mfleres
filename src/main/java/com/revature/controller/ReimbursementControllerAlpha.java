@@ -143,25 +143,30 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 	@Override
 	public Object finalizeRequest(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
-		Integer reimbursementID = (Integer)request.getAttribute("reimbursementId");
-		String reimbursementStatusType = (String)request.getAttribute("reimbursementStatus");
+		String reimbursementIDString = (String)request.getParameter("reimbursementId");
+		String reimbursementStatusType = (String)request.getParameter("reimbursementStatus");
+		logger.trace(reimbursementIDString + ", " + reimbursementStatusType);
 		if(loggedEmployee == null) {
 			logger.error("No employee logged in");
-			return null;
-		} else if(reimbursementID == null) {
+			return new ClientMessage("No Employee");
+		} else if(reimbursementIDString == null) {
 			logger.error("No reimbursement id inputted as parameter");
-			return null;
+			return new ClientMessage("No reimbursement id");
 		} else if (reimbursementStatusType == null || (!reimbursementStatusType.toUpperCase().equals("APPROVED") && !reimbursementStatusType.toUpperCase().equals("DECLINED"))) {
 			logger.error("Invalid reimbursment status");
-			return null;
+			return new ClientMessage("Invalid reimbursement status");
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
-		Reimbursement reimbursement = ReimbursementServiceAlpha.getInstance().getSingleRequest(new Reimbursement(reimbursementID, null, null, 0, null, null, null, null, null));
+		Reimbursement reimbursement = ReimbursementServiceAlpha.getInstance().getSingleRequest(new Reimbursement(Integer.valueOf(reimbursementIDString), null, null, 0, null, null, null, null, null));
 		if(loggedEmployee.getEmployeeRole().getId() == 2) {
 			//Only manager can finalize
 			reimbursement.setApprover(loggedEmployee);
 			reimbursement.setStatus(new ReimbursementStatus(reimbursementStatusType.toUpperCase()));
-			ReimbursementServiceAlpha.getInstance().finalizeRequest(reimbursement);
+			if(ReimbursementServiceAlpha.getInstance().finalizeRequest(reimbursement)) {
+				return new ClientMessage("Reimbursement " + reimbursementIDString + " finalized");
+			} else {
+				return new ClientMessage("Failed to finalize " + reimbursementIDString);
+			}
 		}
 		return null;
 	}
