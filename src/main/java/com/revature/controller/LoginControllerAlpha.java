@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.revature.ajax.ClientMessage;
 import com.revature.model.Employee;
 import com.revature.service.EmployeeServiceAlpha;
 import com.revature.util.ConnectionUtil;
@@ -26,10 +27,10 @@ public class LoginControllerAlpha implements LoginController {
 	
 	
 	@Override
-	public String login(HttpServletRequest request) {
+	public Object login(HttpServletRequest request) {
 		if(request.getMethod() == "GET") {
 			logger.trace("login->GET");
-			return "login.html";
+			return new ClientMessage("Invalid Login");
 		}
 		logger.trace("LoginController: logging in...");
 		String username = request.getParameter("username");
@@ -39,11 +40,11 @@ public class LoginControllerAlpha implements LoginController {
 			new Employee(0, null, null, username, password, null, null));
 		if(loggedEmployee == null) {
 			logger.trace("login->loggedEmployee == null");
-			return "login.html";
+			return new ClientMessage("Invalid Login");
 		}else {
 			request.getSession().setAttribute("loggedEmployee", loggedEmployee);
 			logger.trace("Logged into "+loggedEmployee);
-			return "home.do";
+			return loggedEmployee;
 		}
 	}
 

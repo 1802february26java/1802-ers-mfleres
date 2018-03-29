@@ -18,7 +18,7 @@ public interface LoginController {
 	 * If the user successfully logs in, the information of the user
 	 * will be stored within the session.
 	 * 
-	 * It can return a URI directing the user the HomeController
+	 * It returns the Employee object
 	 * if he/she was authenticated.
 	 * 
 	 * It can return an Object containing a message stating that the

@@ -29,10 +29,11 @@ public class HomeControllerAlpha implements HomeController {
 		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
 		if(loggedEmployee == null) {
 			logger.trace("Showing login, no employee currently logged in.");
-			return "login.html";
+			return "login.do";
 		}
 		else if(loggedEmployee.getEmployeeRole().getType().equals("MANAGER")) {
 			logger.trace("show home for manager id: "+loggedEmployee.getId());
+			logger.trace("returning: 'ManagerHome.html'");
 			return "ManagerHome.html";
 		} else {
 			logger.trace("show home for employee id: "+loggedEmployee.getId());

@@ -108,7 +108,7 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 			return new ClientMessage(GlobalVars.INVALID_REQUEST);
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
-		if(loggedEmployee.getEmployeeRole().getId() == 2) {
+		if(loggedEmployee.getEmployeeRole().getId() != 0) {
 			if(reimbursementStatus != null) {
 				//Manager views all requests
 				if(reimbursementStatus.equals("PENDING")) {

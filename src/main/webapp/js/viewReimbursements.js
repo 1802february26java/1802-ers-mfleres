@@ -126,7 +126,11 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, description);
 
             //Requester
-            createNodeOnTableRow(reimbursementRow, `${reimbursement.requester.username}`);
+            let requester = "N/A";
+            if (reimbursement.requester) {
+                requester = reimbursement.requester.username;
+            }
+            createNodeOnTableRow(reimbursementRow, requester);
 
             //Skipping the receipt blob for now...
 
