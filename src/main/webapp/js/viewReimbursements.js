@@ -3,6 +3,13 @@ function viewOnLoad() {
     document.getElementById("viewPending").addEventListener("click", viewPendingReimbursements);
     document.getElementById("viewResolved").addEventListener("click", viewResolvedReimbursements);
     document.getElementById("viewEmployeeById").addEventListener("click", viewEmployeeReimbursementsById);
+    document.getElementById("resolveModalClose").addEventListener("click",closeModal);
+    document.getElementById("modalApprove").addEventListener("click",modalApproveReimbursement);
+    document.getElementById("modalDecline").addEventListener("click",modalDeclineReimbursement);
+}
+
+function closeModal(){
+    document.getElementById("resolveModal").style.display = "none";
 }
 
 function viewPendingReimbursements() {
@@ -130,7 +137,7 @@ function presentReimbursements(data) {
             if (reimbursement.requester) {
                 requester = reimbursement.requester.username;
             }
-            createNodeOnTableRow(reimbursementRow, requester);
+            createRequesterNodeOnTableRow(reimbursementRow, requester);
 
             //Skipping the receipt blob for now...
 
@@ -142,7 +149,7 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, approver);
 
             //Status
-            createNodeOnTableRow(reimbursementRow, `${reimbursement.status.status}`);
+            createResolveStatusNodeOnTableRow(reimbursementRow, `${reimbursement.status.status}`);
 
             //Type
             createNodeOnTableRow(reimbursementRow, `${reimbursement.type.type}`);
@@ -165,12 +172,102 @@ function createRequesterNodeOnTableRow(rowElement, dataText, employeeId) {
     let reimbursementDataNode = document.createElement("td");
     let anchorNode = document.createElement("a");
     anchorNode.setAttribute("employeeId",employeeId);
-    anchorNode.addEventListener("click",function(e) {viewEmployeeReimbursements(employeeId)});
+    anchorNode.addEventListener("click",viewEmployeeReimbursements);
     let reimbursementDataNodeText = document.createTextNode(dataText);
     anchorNode.appendChild(reimbursementDataNodeText);
     reimbursementDataNode.appendChild(anchorNode);
 
     rowElement.appendChild(reimbursementDataNode);
+}
+
+function viewEmployeeReimbursements(){
+    requesterId = event.target.innerHTML;
+    console.log(`requesterId: ${requesterId}`);
+    if (requesterId != null) {
+        console.log("viewEmployeeReimbursements, id = " + requesterId);
+        //AJAX
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = () => {
+            console.log(`${xhr.readyState},${xhr.status}`)
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                console.log(data);
+
+                //Present the data to the user
+                presentReimbursements(data);
+            }
+        };
+
+        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}`);
+
+        xhr.send();
+    }
+}
+
+function createResolveStatusNodeOnTableRow(rowElement, dataText) {
+    let reimbursementDataNode = document.createElement("td");
+    let anchorNode = document.createElement("a");
+    anchorNode.addEventListener("click",updateStatusModal);
+    let reimbursementDataNodeText = document.createTextNode(dataText);
+    anchorNode.appendChild(reimbursementDataNodeText);
+    reimbursementDataNode.appendChild(anchorNode);
+
+    rowElement.appendChild(reimbursementDataNode);
+}
+
+function updateStatusModal(){
+    let reimbursementIdOfRow = event.target.parentElement.parentElement.firstChild.innerHTML;
+    console.log(`Reimbursement ID of row: ${reimbursementIdOfRow}`);
+    sessionStorage.setItem("reimbursementID",reimbursementIdOfRow);
+    let modalElement = document.getElementById("resolveModal");
+    modalElement.style.display="block";
+}
+
+function modalApproveReimbursement() {
+    console.log("approveReimbursement");
+    //AJAX
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        console.log(`${xhr.readyState},${xhr.status}`);
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let data = JSON.parse(xhr.responseText);
+            console.log(data);
+
+            //Present the data to the user
+            document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+        }
+    };
+
+    let reimbursementId = sessionStorage.getItem("reimbursementID");
+    xhr.open("POST", `resolveReimbursement.do?reimbursementStatus=APPROVED&reimbursementId=${reimbursementId}`);
+
+    xhr.send();
+    closeModal();
+}
+
+function modalDeclineReimbursement() {
+    console.log("declineReimbursement");
+    //AJAX
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = () => {
+        console.log(`${xhr.readyState},${xhr.status}`)
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let data = JSON.parse(xhr.responseText);
+            console.log(data);
+
+            //Present the data to the user
+            document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+        }
+    };
+
+    let reimbursementId = sessionStorage.getItem("reimbursementID");
+    xhr.open("POST", `resolveReimbursement.do?reimbursementStatus=DECLINED&reimbursementId=${reimbursementId}`);
+
+    xhr.send();
+    closeModal();
 }
 
 function dateTimeToString(dateTime) {

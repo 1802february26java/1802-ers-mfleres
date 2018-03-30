@@ -40,8 +40,19 @@
             </div>
         </div>
         <div id="listMessage"><span></span></div>
-        <table id="table" class="table table-striped"></table>
-
+        <div>
+            <table id="table" class="table table-striped"></table>
+        </div>
+        <div>
+            <button id="updateReimbursementsButton" class="btn btn-success">Update</button>
+        </div>
+    </div>
+    <div id="resolveModal" class="modal">
+        <div class="modal-content">
+            <span id="resolveModalClose" class="close">&times;</span>
+            <button id="modalApprove" class="btn btn-success">Approve</button>
+            <button id="modalDecline" class="btn btn-danger">Decline</button>
+        </div>
     </div>
     <script src="js/viewReimbursements.js"></script>
     <script src="js/resolveReimbursement.js"></script>

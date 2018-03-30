@@ -1,5 +1,6 @@
 window.onload = () => {
     document.getElementById("viewEmployeeReimbursements").addEventListener("click", viewMyReimbursements);
+    document.getElementById("requestReimbursement").addEventListener("click", requestReimbursement);
 }
 
 function viewMyReimbursements(){
@@ -22,8 +23,12 @@ function viewMyReimbursements(){
             }
         };
 
-        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}`);
+        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}&status=PENDING`);
 
         xhr.send();
     }
+}
+
+function requestReimbursement() {
+    
 }

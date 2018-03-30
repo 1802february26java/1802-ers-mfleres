@@ -86,7 +86,10 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 	@Override
 	public Object multipleRequests(HttpServletRequest request) {
 		Employee loggedEmployee = (Employee) request.getSession().getAttribute("loggedEmployee");
-		String reimbursementStatus = (String) request.getAttribute("status");
+		String reimbursementStatus = (String) request.getParameter("status");
+		if(reimbursementStatus == null) {
+			reimbursementStatus = (String) request.getAttribute("status");
+		}
 		logger.trace("eployeeParam: "+request.getParameter("employeeId"));	
 		Employee desiredEmployee;
 		try {
