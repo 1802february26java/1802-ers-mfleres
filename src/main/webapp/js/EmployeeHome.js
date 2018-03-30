@@ -1,6 +1,7 @@
 window.onload = () => {
     document.getElementById("viewEmployeeReimbursements").addEventListener("click", viewMyReimbursements);
     document.getElementById("requestReimbursement").addEventListener("click", requestReimbursement);
+    document.getElementById("requestModalClose").addEventListener("click",closeModal);
 }
 
 function viewMyReimbursements(){
@@ -30,5 +31,11 @@ function viewMyReimbursements(){
 }
 
 function requestReimbursement() {
-    
+    console.log("Displaying reimbursement request options...");
+    let modalElement = document.getElementById("requestModal");
+    modalElement.style.display="block";
+}
+
+function closeModal(){
+    document.getElementById("requestModal").style.display = "none";
 }
