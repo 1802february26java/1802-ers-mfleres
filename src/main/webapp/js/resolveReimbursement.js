@@ -1,9 +1,6 @@
 window.onload = () => {
     console.log("resolveOnLoad");
     viewOnLoad();
-    document.getElementById("approveButton").addEventListener("click", approveReimbursement);
-    document.getElementById("declineButton").addEventListener("click", declineReimbursement);
-
 }
 
 function approveReimbursement() {
