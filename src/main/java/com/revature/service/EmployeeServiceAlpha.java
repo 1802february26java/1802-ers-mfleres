@@ -2,11 +2,14 @@ package com.revature.service;
 
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import com.revature.model.Employee;
 import com.revature.model.EmployeeToken;
 import com.revature.repository.EmployeeJDBS;
 
 public class EmployeeServiceAlpha implements EmployeeService{
+	private static Logger logger = Logger.getLogger(EmployeeServiceAlpha.class);
 	
 	// Singleton
 	private static EmployeeServiceAlpha employeeService = new EmployeeServiceAlpha();
@@ -18,11 +21,14 @@ public class EmployeeServiceAlpha implements EmployeeService{
 	
 	@Override
 	public Employee authenticate(Employee employee) {
-		Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getUsername());
-		String hashedPassword = EmployeeJDBS.getInstance().getPasswordHash(employee);
-		
-		if(loggedEmployee.getPassword().equals(hashedPassword)) {
-			return loggedEmployee;
+		logger.trace("authenticating " + employee);
+		if(employee != null) {
+			Employee loggedEmployee = EmployeeJDBS.getInstance().select(employee.getUsername());
+			String hashedPassword = EmployeeJDBS.getInstance().getPasswordHash(employee);
+			
+			if(loggedEmployee != null && loggedEmployee.getPassword().equals(hashedPassword)) {
+				return loggedEmployee;
+			}
 		}
 		return null;
 	}

@@ -14,11 +14,12 @@
 <meta charset="ISO-8859-1">
 </head>
 <body>
-    <h1>Employee Home</h1>
+    <h1 id="employeeHeader">Employee Home</h1>
     <div>
         <div id="navbar">
             <div>
                 <a id="logout" class="btn" href="logout.do">Logout</a>
+                <a id="profile">Profile</a>
             </div>
         </div>
         <div id="options">
@@ -34,12 +35,25 @@
     <div id="requestModal" class="modal">
         <div class="modal-content">
             <span id="requestModalClose" class="close">&times;</span>
-            <div>Amount: <input id="requestAmount" placeholder="0.00"/></div>
+            <div>Amount: <input id="requestAmount" type="number"></div>
             <div>Description: <input id="requestDescription"/></div>
             <div>Type: <select id="requestType"></select></div>
+            <div><button id="submitRequest" class="btn">Submit</button></div>
+        </div>
+    </div>
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span id="profileModalClose" class="close">&times;</span>
+            <div>Username: <span id="profileUsername"></span></div>
+            <div>First Name: <input id="profileFirstName"/><button id="profileFirstNameEdit">Edit</button></div>
+            <div>Last Name: <input id="profileLastName"/><button id="profileLastNameEdit">Edit</button></div>
+            <div>Email: <input id="profileEmail"/><button id="profileEmailEdit">Edit</button></div>
+            <div id="profileModalMessage"></div>
         </div>
     </div>
     <script src="js/viewReimbursements.js"></script>
+    <script src="js/submitReimbursement.js"></script>
+    <script src="js/updateEmployee.js"></script>
     <script src="js/EmployeeHome.js"></script>
 </body>
 </html>

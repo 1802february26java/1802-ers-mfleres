@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.revature.ajax.ClientMessage;
 import com.revature.model.Employee;
 import com.revature.service.EmployeeServiceAlpha;
 import com.revature.util.ConnectionUtil;
@@ -26,30 +27,29 @@ public class EmployeeInformationControllerAlpha implements EmployeeInformationCo
 	
 	@Override
 	public Object registerEmployee(HttpServletRequest request) {
-		/*Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
-		if(loggedEmployee == null || !loggedEmployee.getEmployeeRole().getType().equals("MANAGER")) {
-			return "Unsuccessful";
-		}else {
-			String firstName, lastName, username, password, email, role;
-			try {
-				firstName = (String)request.getAttribute("firstName");
-				lastName = (String)request.getAttribute("lastName");
-				username = (String)request.getAttribute("username");
-			}
-			Employee employee = new Employee(0, firstName, lastName, username, password, email, employeeRole)
-			
-			
-			if(EmployeeServiceAlpha.getInstance().createEmployee(employee)) {
-				
-			}
-		}*/
 		return null;
 	}
 
 	@Override
 	public Object updateEmployee(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		String newFirstName = request.getParameter("firstName");
+		String newLastName = request.getParameter("lastName");
+		String newEmail = request.getParameter("email");
+		Employee loggedEmployee = (Employee)request.getSession().getAttribute("loggedEmployee");
+		if(newFirstName != null) {
+			loggedEmployee.setFirstName(newFirstName);
+		}
+		if(newLastName != null) {
+			loggedEmployee.setLastName(newLastName);
+		}
+		if(newEmail != null) {
+			loggedEmployee.setEmail(newEmail);
+		}
+		if(EmployeeServiceAlpha.getInstance().updateEmployeeInformation(loggedEmployee)) {
+			return new ClientMessage("SUCCESS");
+		} else {
+			return new ClientMessage("FAILURE");
+		}
 	}
 
 	@Override

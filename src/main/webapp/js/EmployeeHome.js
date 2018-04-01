@@ -1,7 +1,15 @@
 window.onload = () => {
     document.getElementById("viewEmployeeReimbursements").addEventListener("click", viewMyReimbursements);
     document.getElementById("requestReimbursement").addEventListener("click", requestReimbursement);
-    document.getElementById("requestModalClose").addEventListener("click",closeModal);
+    document.getElementById("profile").addEventListener("click",viewProfile);
+    document.getElementById("profileModalClose").addEventListener("click",closeProfileModal);
+    submitOnLoad();
+    document.getElementById("profileUsername").innerHTML = sessionStorage.getItem("employeeUsername");
+    document.getElementById("profileFirstName").setAttribute("placeholder",sessionStorage.getItem("employeeFirstName"));
+    document.getElementById("profileLastName").setAttribute("placeholder",sessionStorage.getItem("employeeLastName"));
+    document.getElementById("profileEmail").setAttribute("placeholder",sessionStorage.getItem("employeeEmail"));
+    document.getElementById("employeeHeader").innerHTML=sessionStorage.getItem("employeeUsername");
+    updateEmployeeOnLoad();
 }
 
 function viewMyReimbursements(){
@@ -30,12 +38,10 @@ function viewMyReimbursements(){
     }
 }
 
-function requestReimbursement() {
-    console.log("Displaying reimbursement request options...");
-    let modalElement = document.getElementById("requestModal");
-    modalElement.style.display="block";
+function viewProfile() {
+    document.getElementById("profileModal").style.display="block";
 }
 
-function closeModal(){
-    document.getElementById("requestModal").style.display = "none";
+function closeProfileModal(){
+    document.getElementById("profileModal").style.display="none";
 }

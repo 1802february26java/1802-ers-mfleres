@@ -11,20 +11,27 @@
     <!-- Boostrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="css/Login.css"></link>
+    <link rel="stylesheet" href="css/ERS.css"></link>
 </head>
 <body>
-    <div id="form-panel" class="panel">
-        <!--form action="login.do" method="POST"-->
+    <div id="logo" class="panel panel-default"><h1><b>Expense Reimbursement System</b></h1></div>
+    <div class="col-md-4 col-md-offset-4">
+        <div id="form-panel" class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Login</h2>
+            </div>
             <div>
                 <input id="username" name="username" placeholder="Username">
             </div>
             <div>
                 <input id="password" name="password" placeholder="Password" type="password">
             </div>
+            <div id="loginMessage"></div>
             <div>
                 <button id="loginButton" class="btn btn-md btn-success btn-block">Submit</button>
             </div>
-        <!--/form-->
+        </div>
     </div>
     <script src="js/login.js"></script>
 </body>

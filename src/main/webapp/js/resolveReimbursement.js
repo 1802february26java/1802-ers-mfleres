@@ -1,6 +1,5 @@
-window.onload = () => {
+resolveOnload = () => {
     console.log("resolveOnLoad");
-    viewOnLoad();
 }
 
 function approveReimbursement() {

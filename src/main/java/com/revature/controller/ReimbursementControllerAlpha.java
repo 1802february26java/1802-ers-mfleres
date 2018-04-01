@@ -42,9 +42,17 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 			return "Failure";
 		}
 		Employee loggedEmployee = (Employee)loggedEmployeeObject;
-		double amount = (Double)request.getAttribute("amount");
-		String description = request.getAttribute("description").toString();
-		String reimbursementTypeString = request.getAttribute("type").toString();
+		double amount = 0.0;
+		try {
+			amount = Double.valueOf(request.getParameter("amount"));
+		} catch (NumberFormatException e) {
+			return new ClientMessage("Invalid Input");
+		}
+		logger.trace("amount: " + amount);
+		String description = request.getParameter("description");
+		logger.trace("description: "+ description);
+		String reimbursementTypeString = request.getParameter("type");
+		logger.trace("type: " + reimbursementTypeString);
 		ReimbursementType type = null;
 		Set<ReimbursementType> reimbursementTypes = ReimbursementServiceAlpha.getInstance().getReimbursementTypes();
 		for(ReimbursementType rt : reimbursementTypes) {
@@ -56,10 +64,10 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 		Reimbursement reimbursement = new Reimbursement(0, null, null, amount, description, loggedEmployee, null,
 				null, type);
 		if(ReimbursementServiceAlpha.getInstance().submitRequest(reimbursement)) {
-			return "Success";
+			return new ClientMessage("Success");
 		}
 		
-		return "Failure";
+		return new ClientMessage("Failure");
 	}
 
 	@Override
@@ -111,7 +119,7 @@ public class ReimbursementControllerAlpha implements ReimbursementController{
 			return new ClientMessage(GlobalVars.INVALID_REQUEST);
 		}
 		loggedEmployee = EmployeeServiceAlpha.getInstance().getEmployeeInformation(loggedEmployee);
-		if(loggedEmployee.getEmployeeRole().getId() != 0) {
+		if(loggedEmployee.getEmployeeRole().getId() == 2) {
 			if(reimbursementStatus != null) {
 				//Manager views all requests
 				if(reimbursementStatus.equals("PENDING")) {

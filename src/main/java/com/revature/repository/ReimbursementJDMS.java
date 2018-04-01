@@ -128,13 +128,23 @@ public class ReimbursementJDMS implements ReimbursementRepository{
 				statement.setInt(++parameterIndex,reimbursement.getId());
 			}
 			statement.setTimestamp(++parameterIndex, Timestamp.valueOf(reimbursement.getRequested()));
-			statement.setTimestamp(++parameterIndex, Timestamp.valueOf(reimbursement.getResolved()));
+			if(reimbursement.getResolved() != null) {
+				statement.setTimestamp(++parameterIndex, Timestamp.valueOf(reimbursement.getResolved()));
+			} else
+			{
+				statement.setNull(++parameterIndex,java.sql.Types.TIMESTAMP);
+			}
 			statement.setDouble(++parameterIndex, reimbursement.getAmount());
 			statement.setString(++parameterIndex, reimbursement.getDescription());
 			Blob receiptBlob = objectToBlob(reimbursement.getReceipt());
 			statement.setBlob(++parameterIndex, receiptBlob);
 			statement.setInt(++parameterIndex, reimbursement.getRequester().getId());
-			statement.setInt(++parameterIndex, reimbursement.getApprover().getId());
+			if(reimbursement.getApprover() != null) {
+				statement.setInt(++parameterIndex, reimbursement.getApprover().getId());
+			} else
+			{
+				statement.setNull(++parameterIndex,java.sql.Types.INTEGER);
+			}
 			statement.setInt(++parameterIndex, reimbursement.getStatus().getId());
 			statement.setInt(++parameterIndex, reimbursement.getType().getId());
 			

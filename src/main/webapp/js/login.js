@@ -12,6 +12,8 @@ window.onload = () => {
 function loginEvent() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
+    document.getElementById("username").disabled = true;
+    document.getElementById("password").disabled = true;
 
     let xhr = new XMLHttpRequest();
 
@@ -24,7 +26,8 @@ function loginEvent() {
 
             //Call login response processing
             login(data, username);
-            
+            document.getElementById("username").disabled = false;
+            document.getElementById("password").disabled = false;
         }
     };
 
@@ -39,10 +42,13 @@ function login(data, username) {
     console.log("login(data,username)");
     //If message is a member of the JSON it was AUTHENTICATION FAILED
     if (data.message) {
-        document.getElementById("loginMessage").innerHTML = '<span class="label label-danger label-center">Wrong credentials.</span>';
+        document.getElementById("loginMessage").innerHTML = `<span class="label label-danger label-center">${data.message}</span>`;
     } else {
         //Using session storage of JavaScript
         sessionStorage.setItem("employeeUsername", data.username);
+        sessionStorage.setItem("employeeFirstName", data.firstName);
+        sessionStorage.setItem("employeeLastName", data.lastName);
+        sessionStorage.setItem("employeeEmail", data.email);
         window.location.replace("home.do");
     }
 }

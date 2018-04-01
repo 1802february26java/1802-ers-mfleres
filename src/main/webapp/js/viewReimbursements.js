@@ -1,4 +1,7 @@
-function viewOnLoad() {
+let previousView = 0;
+let previouslyViewedEmployeeId = 0;
+
+function viewReimbursementOnLoad() {
     console.log("viewOnLoad");
     document.getElementById("viewPending").addEventListener("click", viewPendingReimbursements);
     document.getElementById("viewResolved").addEventListener("click", viewResolvedReimbursements);
@@ -14,6 +17,7 @@ function closeModal(){
 
 function viewPendingReimbursements() {
     console.log("viewPending");
+    previousView = 1;
     //AJAX
     let xhr = new XMLHttpRequest();
 
@@ -35,6 +39,7 @@ function viewPendingReimbursements() {
 
 function viewResolvedReimbursements() {
     console.log("viewResolved");
+    previousView = 2;
     //AJAX
     let xhr = new XMLHttpRequest();
 
@@ -54,9 +59,9 @@ function viewResolvedReimbursements() {
     xhr.send();
 }
 
-// Could not get in-line employee selection to work
-function viewEmployeeReimbursementsById() {
-    requesterId = document.getElementById("employeeInfo").value;
+function viewEmployeeReimbursements(requesterId){
+    previousView = 3;
+    previouslyViewedEmployeeId = requesterId;
     console.log(`requesterId: ${requesterId}`);
     if (requesterId != null) {
         console.log("viewEmployeeReimbursements, id = " + requesterId);
@@ -80,11 +85,21 @@ function viewEmployeeReimbursementsById() {
     }
 }
 
+function viewEmployeeReimbursementsFromTable(){
+    let requesterId = event.target.innerHTML;
+    viewEmployeeReimbursements(requesterId);
+}
+
+function viewEmployeeReimbursementsById() {
+    let requesterId = document.getElementById("employeeInfo").value;
+    viewEmployeeReimbursements(requesterId);
+}
+
 function presentReimbursements(data) {
     console.log("presentReimbursement");
     if (data.message) {
         //Something went wrong
-        var errorMessage = data.message;
+        let errorMessage = data.message;
         document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center">${errorMessage}</span>`;
     } else {
         //Clear Error Message
@@ -161,48 +176,23 @@ function presentReimbursements(data) {
 }
 
 function createNodeOnTableRow(rowElement, dataText) {
-    let reimbursementDataNode = document.createElement("td");
-    reimbursementDataNodeText = document.createTextNode(dataText);
-    reimbursementDataNode.appendChild(reimbursementDataNodeText);
+    let dataNode = document.createElement("td");
+    dataNodeText = document.createTextNode(dataText);
+    dataNode.appendChild(dataNodeText);
 
-    rowElement.appendChild(reimbursementDataNode);
+    rowElement.appendChild(dataNode);
 }
 
 function createRequesterNodeOnTableRow(rowElement, dataText, employeeId) {
     let reimbursementDataNode = document.createElement("td");
     let anchorNode = document.createElement("a");
     anchorNode.setAttribute("employeeId",employeeId);
-    anchorNode.addEventListener("click",viewEmployeeReimbursements);
+    anchorNode.addEventListener("click",viewEmployeeReimbursementsFromTable);
     let reimbursementDataNodeText = document.createTextNode(dataText);
     anchorNode.appendChild(reimbursementDataNodeText);
     reimbursementDataNode.appendChild(anchorNode);
 
     rowElement.appendChild(reimbursementDataNode);
-}
-
-function viewEmployeeReimbursements(){
-    requesterId = event.target.innerHTML;
-    console.log(`requesterId: ${requesterId}`);
-    if (requesterId != null) {
-        console.log("viewEmployeeReimbursements, id = " + requesterId);
-        //AJAX
-        let xhr = new XMLHttpRequest();
-
-        xhr.onreadystatechange = () => {
-            console.log(`${xhr.readyState},${xhr.status}`)
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-                console.log(data);
-
-                //Present the data to the user
-                presentReimbursements(data);
-            }
-        };
-
-        xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}`);
-
-        xhr.send();
-    }
 }
 
 function createResolveStatusNodeOnTableRow(rowElement, dataText) {
@@ -237,6 +227,7 @@ function modalApproveReimbursement() {
 
             //Present the data to the user
             document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+            refreshReimbursementsTable();
         }
     };
 
@@ -260,6 +251,7 @@ function modalDeclineReimbursement() {
 
             //Present the data to the user
             document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+            refreshReimbursementsTable();
         }
     };
 
@@ -268,6 +260,20 @@ function modalDeclineReimbursement() {
 
     xhr.send();
     closeModal();
+}
+
+function refreshReimbursementsTable()
+{
+    switch(previousView){
+        case 1:
+        viewPendingReimbursements();
+        break;
+        case 2:
+        viewResolvedReimbursements();
+        break;
+        case 3:
+        viewEmployeeReimbursements(previouslyViewedEmployeeId);
+    }
 }
 
 function dateTimeToString(dateTime) {
