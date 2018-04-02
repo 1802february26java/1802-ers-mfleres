@@ -3,3 +3,12 @@
     color: springgreen;
     text-align: center;
 }
+
+html {
+    background-color: rgb(164, 224, 252);
+}
+
+.panel {
+    text-align: center;
+    background-color: rgb(140, 195, 240);
+}

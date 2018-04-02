@@ -2,10 +2,7 @@
     margin-top: 10%;
 }
 
-.panel {
-    text-align: center;
-    background-color: rgb(140, 195, 240);
-}
+
 
 .panel .panel-heading {
     background-color: rgb(120, 175, 220);
@@ -19,10 +16,6 @@
 
 .btn-block {
     width: 80%;
-}
-
-html {
-    background-color: rgb(164, 224, 252);
 }
 
 input {

@@ -5,3 +5,33 @@ td, th {
 a {
     cursor: pointer;
 }
+
+.col-md-4 > a {
+    color: springgreen;
+}
+
+#optionButtons .btnPadder {
+    padding: 3px 3px 3px 3px;
+}
+
+#viewEmployeeReimbursementsSearch {
+    padding: 3px 3px 3px 3px;
+}
+
+body {
+    background-color: rgb(164, 224, 252);
+}
+
+table {
+    background-color: rgb(200, 200, 200);
+}
+
+#logo > div{
+    background-color: teal;
+    color: springgreen;
+    text-align: center;
+}
+
+#logo {
+    font-size: 20px;
+}

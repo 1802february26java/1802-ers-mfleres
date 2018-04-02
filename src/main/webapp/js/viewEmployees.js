@@ -17,9 +17,14 @@ function viewAllEmployees() {
 
             //Present the data to the user
             presentEmployees(data);
+            document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center"></span>`;
+        }
+        if(xhr.readyState === 4){
+            toggleButtons(false);
         }
     };
-
+    document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">Processing...</span>`;
+    toggleButtons(true);
     xhr.open("GET", `viewAll.do?fetch=LIST`);
 
     xhr.send();
@@ -35,10 +40,10 @@ function presentEmployees(data) {
         //Clear Error Message
         document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center"></span>`
         //Display table of all reimbursements
-        let employeeTable = document.getElementById("table");
+        let employeeTable = document.getElementById("displayTable");
 
         //Setup table with headers
-        employeeTable.innerHTML = `<thread class='thread-light'><tr>
+        employeeTable.innerHTML = `<thread class='thread-dark'><tr>
         <th>ID</th>
         <th>Username</th>
         <th>First Name</th>
@@ -46,6 +51,7 @@ function presentEmployees(data) {
         <th>Email</th>
         </tr></thread>`;
 
+        let tableBody= document.createElement("tbody");
         data.forEach((employee) => {
             console.log("inserting an employee");
             let employeeRow = document.createElement("tr");
@@ -66,8 +72,9 @@ function presentEmployees(data) {
             createNodeOnTableRow(employeeRow, `${employee.email}`);
 
             console.log(employeeRow.innerHTML);
-            employeeTable.appendChild(employeeRow);
+            tableBody.appendChild(employeeRow);
         });
+        employeeTable.appendChild(tableBody);
     }
 }
 

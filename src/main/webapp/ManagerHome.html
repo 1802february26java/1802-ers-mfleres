@@ -12,33 +12,47 @@
     <!-- Boostrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="css/ERS.css"></link>
     <link rel="stylesheet" href="css/ManagerHome.css"></link>
 </head>
 
 <body>
-    <h1>Manager Home</h1>
-    <div>
-        <div>
-            <a id="logout" class="btn" href="logout.do">Logout</a>
+    <div id="logo" class="container-fluid panel panel-default">
+        <div class="col-md-4">
+            <b id="managerHeader">Manager Home</b>
         </div>
-        <div id="viewOptions">
-            <div>
-                <button id="viewAllEmployeesButton">View All Employees</button>
-            </div>
-            <div id="viewAllButtons">
-                <button id="viewPending" class="btn">View Pending Reimbursements</button>
-                <button id="viewResolved" class="btn">View Resolved Reimbursements</button>
-            </div>
-            <div id="viewEmployeeReimbursementsSearch">
-                <input id="employeeInfo" placeholder="Employee Search">
-                <button id="viewEmployeeById">Search</button>
-            </div>
-        </div>
-        <div id="listMessage"><span></span></div>
-        <div>
-            <table id="table" class="table table-striped"></table>
+        <div class="col-md-4"><p></p></div>
+        <div class="col-md-4">
+            <a id="logout" href="logout.do">Logout</a>
         </div>
     </div>
+    <div>
+        <div class="col-md-6 col-md-offset-3">
+            <div id="viewOptions" class="panel panel-default">
+                <div id="optionButtons">
+                    <div class="btnPadder col-md-4">
+                        <button id="viewAllEmployeesButton" class="btn btn-primary col-md-12">View All Employees</button>
+                    </div>
+                    <div class="btnPadder col-md-4">
+                        <button id="viewPending" class="btn btn-primary col-md-12">View Pending Reimbursements</button>
+                    </div>
+                    <div class="btnPadder col-md-4">
+                        <button id="viewResolved" class="btn btn-primary col-md-12">View Resolved Reimbursements</button>
+                    </div>
+                </div>
+                <div id="viewEmployeeReimbursementsSearch">
+                    <input id="employeeInfo" placeholder="Employee Search">
+                    <button id="viewEmployeeById">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="listMessage">
+            <span></span>
+        </div>
+        <div>
+            <table id="displayTable" class="table table-striped"></table>
+        </div>
     <div id="resolveModal" class="modal">
         <div class="modal-content">
             <span id="resolveModalClose" class="close">&times;</span>

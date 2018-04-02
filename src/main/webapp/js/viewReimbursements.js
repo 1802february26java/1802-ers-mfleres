@@ -11,6 +11,8 @@ function viewReimbursementOnLoad() {
     document.getElementById("modalDecline").addEventListener("click",modalDeclineReimbursement);
 }
 
+
+
 function closeModal(){
     document.getElementById("resolveModal").style.display = "none";
 }
@@ -31,7 +33,8 @@ function viewPendingReimbursements() {
             presentReimbursements(data);
         }
     };
-
+    document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">Processing...</span>`;
+    toggleButtons(true);
     xhr.open("GET", `viewPending.do?fetch=LIST`);
 
     xhr.send();
@@ -53,7 +56,8 @@ function viewResolvedReimbursements() {
             presentReimbursements(data);
         }
     };
-
+    document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">Processing...</span>`;
+    toggleButtons(true);
     xhr.open("GET", `viewResolved.do?fetch=LIST`);
 
     xhr.send();
@@ -78,10 +82,12 @@ function viewEmployeeReimbursements(requesterId){
                 presentReimbursements(data);
             }
         };
-
+        document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center">Processing...</span>`;
+        toggleButtons(true);
         xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}`);
 
         xhr.send();
+        
     }
 }
 
@@ -101,25 +107,27 @@ function presentReimbursements(data) {
         //Something went wrong
         let errorMessage = data.message;
         document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center">${errorMessage}</span>`;
+        
     } else {
         //Clear Error Message
         document.getElementById("listMessage").innerHTML = `<span class="label label-danger label-center"></span>`
         //Display table of all reimbursements
-        let reimbursementTable = document.getElementById("table");
+        let reimbursementTable = document.getElementById("displayTable");
 
         //Setup table with headers
-        reimbursementTable.innerHTML = `<thread class='thread-light'><tr>
-        <th>ID</th>
-        <th>Requested</th>
-        <th>Resolved</th>
-        <th>Amount</th>
-        <th>Description</th>
-        <th>Requester</th>
-        <th>Approver</th>
-        <th>Status</th>
-        <th>Type</th>
+        reimbursementTable.innerHTML = `<thread class="mdb-color darken-3"><tr class="text-white">
+        <th scope="col">ID</th>
+        <th scope="col">Requested</th>
+        <th scope="col">Resolved</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Description</th>
+        <th scope="col">Requester</th>
+        <th scope="col">Approver</th>
+        <th scope="col">Status</th>
+        <th scope="col">Type</th>
         </tr></thread>`;
-
+        
+        let tableBody= document.createElement("tbody");
         data.forEach((reimbursement) => {
             console.log("inserting a reimbursement");
             let reimbursementRow = document.createElement("tr");
@@ -139,7 +147,7 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, timeResolved);
 
             //Amount
-            createNodeOnTableRow(reimbursementRow, `${reimbursement.amount}`)
+            createNodeOnTableRow(reimbursementRow, `$${(reimbursement.amount).toFixed(2)}`)
 
             let description = "N/A";
             if (reimbursement.description) {
@@ -170,9 +178,12 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, `${reimbursement.type.type}`);
 
             console.log(reimbursementRow.innerHTML);
-            reimbursementTable.appendChild(reimbursementRow);
+            tableBody.appendChild(reimbursementRow);
         });
+        reimbursementTable.appendChild(tableBody);
+        document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center"></span>`;
     }
+    toggleButtons(false);
 }
 
 function createNodeOnTableRow(rowElement, dataText) {
@@ -226,7 +237,7 @@ function modalApproveReimbursement() {
             console.log(data);
 
             //Present the data to the user
-            document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+            document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center">${data.message}</span>`;
             refreshReimbursementsTable();
         }
     };
@@ -250,7 +261,7 @@ function modalDeclineReimbursement() {
             console.log(data);
 
             //Present the data to the user
-            document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">${data.message}</span>`;
+            document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center">${data.message}</span>`;
             refreshReimbursementsTable();
         }
     };
