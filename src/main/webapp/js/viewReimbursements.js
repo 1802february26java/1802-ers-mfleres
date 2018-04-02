@@ -132,6 +132,9 @@ function presentReimbursements(data) {
             console.log("inserting a reimbursement");
             let reimbursementRow = document.createElement("tr");
 
+            //To check if it is a manager viewing the reimbursements...
+            let modalElement = document.getElementById("resolveModal"); 
+
             //ID
             createNodeOnTableRow(reimbursementRow, `${reimbursement.id}`);
 
@@ -160,7 +163,11 @@ function presentReimbursements(data) {
             if (reimbursement.requester) {
                 requester = reimbursement.requester.username;
             }
-            createRequesterNodeOnTableRow(reimbursementRow, requester);
+            if(modalElement){
+                createRequesterNodeOnTableRow(reimbursementRow, requester);
+            } else {
+                createNodeOnTableRow(reimbursementRow, requester);
+            }
 
             //Skipping the receipt blob for now...
 
@@ -172,7 +179,14 @@ function presentReimbursements(data) {
             createNodeOnTableRow(reimbursementRow, approver);
 
             //Status
-            createResolveStatusNodeOnTableRow(reimbursementRow, `${reimbursement.status.status}`);
+            
+            if(modalElement){
+                //Manager is viewing
+                createResolveStatusNodeOnTableRow(reimbursementRow, `${reimbursement.status.status}`);
+            } else {
+                //This is not a manager, make it a regular node
+                createNodeOnTableRow(reimbursementRow,`${reimbursement.status.status}`);
+            }
 
             //Type
             createNodeOnTableRow(reimbursementRow, `${reimbursement.type.type}`);
@@ -222,7 +236,9 @@ function updateStatusModal(){
     console.log(`Reimbursement ID of row: ${reimbursementIdOfRow}`);
     sessionStorage.setItem("reimbursementID",reimbursementIdOfRow);
     let modalElement = document.getElementById("resolveModal");
-    modalElement.style.display="block";
+    if(modalElement) {
+        modalElement.style.display="block";
+    }
 }
 
 function modalApproveReimbursement() {

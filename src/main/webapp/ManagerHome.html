@@ -3,6 +3,8 @@
 
 <head>
     <title>Manager Home</title>
+
+    <link rel="icon" href="Images/favicon.ico" />
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -53,11 +55,23 @@
     <div>
         <table id="displayTable" class="table table-striped"></table>
     </div>
-    <div id="resolveModal" class="modal">
-        <div class="modal-content">
-            <span id="resolveModalClose" class="close">&times;</span>
-            <button id="modalApprove" class="btn btn-success">Approve</button>
-            <button id="modalDecline" class="btn btn-danger">Decline</button>
+    <div id="resolveModal" class="modal container-fluid">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header row">
+                    <h5 id="resolveModalTitle" class="modal-title col-md-6">Resolve Reimbursement</h5>
+                    <button id="resolveModalClose" type="button" class="close col-md-1 col-md-offset-5" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body row">
+                    <button id="modalApprove" class="btn btn-success col-md-4 col-md-offset-1">Approve</button>
+                    <button id="modalDecline" class="btn btn-danger col-md-4 col-md-offset-2">Decline</button>
+                </div>
+                <div class="modal-footer">
+                    <div id="modalMessage"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="js/viewReimbursements.js"></script>

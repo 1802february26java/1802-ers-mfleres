@@ -35,8 +35,13 @@ function viewMyReimbursements(){
                 //Present the data to the user
                 presentReimbursements(data);
             }
+            if(xhr.readyState === 4){
+                toggleButtons(false);
+            }
         };
 
+        document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center">Processing...</span>`;
+        toggleButtons(true);
         xhr.open("GET", `viewEmployeeReimbursements.do?employeeId=${requesterId}&status=PENDING`);
 
         xhr.send();

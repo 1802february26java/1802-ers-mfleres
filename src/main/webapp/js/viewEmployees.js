@@ -23,7 +23,7 @@ function viewAllEmployees() {
             toggleButtons(false);
         }
     };
-    document.getElementById("listMessage").innerHTML = `<span class="label label-info label-center">Processing...</span>`;
+    document.getElementById("listMessage").innerHTML = `<span class="label label-default label-center">Processing...</span>`;
     toggleButtons(true);
     xhr.open("GET", `viewAll.do?fetch=LIST`);
 
