@@ -10,46 +10,136 @@
         
         <!-- Boostrap JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="css/EmployeeHome.css"></link>
         <link rel="stylesheet" href="css/ERS.css"></link>
+        <link rel="stylesheet" href="css/EmployeeHome.css"></link>
 <meta charset="ISO-8859-1">
 </head>
 <body>
-    <h1 id="employeeHeader">Employee Home</h1>
-    <div>
-        <div id="navbar">
-            <div>
-                <a id="logout" class="btn" href="logout.do">Logout</a>
+    <div id="logo" class="container-fluid panel panel-default">
+        <div class="col-md-4">
+            <b id="employeeHeader">Manager Home</b>
+        </div>
+        <div class="col-md-4"><p></p></div>
+        <div class="col-md-4">
+            <div class="col-md-5">
                 <a id="profile">Profile</a>
             </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5">
+                <a id="logout" href="logout.do">Logout</a>
+            </div>
         </div>
-        <div id="options">
-            <button id="viewEmployeeReimbursements" class="btn">View Pending Reimbursements</button>
-            <button id="requestReimbursement" class="btn">Request Reimbursement</button>
+    </div>
+    <div>
+        <div class="col-md-6 col-md-offset-3">
+            <div id="options" class="panel panel-default container-fluid">
+                <div class="btnPadder col-md-6">
+                    <button id="viewEmployeeReimbursements" class="btn btn-primary col-md-12">View Pending Reimbursements</button>
+                </div>
+                <div class="btnPadder col-md-6">
+                    <button id="requestReimbursement" class="btn btn-primary col-md-12">Request Reimbursement</button>
+                </div>
+            </div>
         </div>
         <div id="listMessage">
+            <span></span>
         </div>
         <div>
             <table id="displayTable" class="table table-striped"></table>
         </div>
     </div>
-    <div id="requestModal" class="modal">
-        <div class="modal-content">
-            <span id="requestModalClose" class="close">&times;</span>
-            <div>Amount: <input id="requestAmount" type="number"></div>
-            <div>Description: <input id="requestDescription"/></div>
-            <div>Type: <select id="requestType"></select></div>
-            <div><button id="submitRequest" class="btn">Submit</button></div>
+    <div id="requestModal" class="modal container-fluid" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header row">
+                    <h5 class="modal-title col-md-6">Reimbursement Request</h5>
+                    <button id="requestModalClose" type="button" class="close col-md-1 col-md-offset-5" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Amount:</p> 
+                        </div>
+                        <div class="col-md-5">
+                            <input id="requestAmount" type="number">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Description:</p>
+                        </div>
+                        <div class="col-md-5">
+                            <input id="requestDescription"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Type:</p>
+                        </div>
+                        <div class="col-md-5">
+                            <select id="requestType"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer row">
+                    <button id="submitRequest" class="btn btn-success">Submit</button>
+                </div>
+            </div>
         </div>
     </div>
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span id="profileModalClose" class="close">&times;</span>
-            <div>Username: <span id="profileUsername"></span></div>
-            <div>First Name: <input id="profileFirstName"/><button id="profileFirstNameEdit">Edit</button></div>
-            <div>Last Name: <input id="profileLastName"/><button id="profileLastNameEdit">Edit</button></div>
-            <div>Email: <input id="profileEmail"/><button id="profileEmailEdit">Edit</button></div>
-            <div id="profileModalMessage"></div>
+    <div id="profileModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header row">
+                    <h5 class="modal-title col-md-6">Profile</h5>
+                    <button id="profileModalClose" type="button" class="close col-md-1 col-md-offset-5" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Username:</p>
+                        </div> 
+                        <div class="col-md-5">
+                            <span id="profileUsername"></span>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>First Name:</p>
+                        </div>
+                        <div class="col-md-5">
+                            <input id="profileFirstName"/><button id="profileFirstNameEdit">Edit</button>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Last Name:</p>
+                        </div>
+                        <div class="col-md-5">
+                            <input id="profileLastName"/><button id="profileLastNameEdit">Edit</button>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p>Email:</p>
+                        </div>
+                        <div class="col-md-5">
+                            <input id="profileEmail"/><button id="profileEmailEdit">Edit</button>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="profileModalMessage"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="js/viewReimbursements.js"></script>

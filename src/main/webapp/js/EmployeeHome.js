@@ -12,6 +12,11 @@ window.onload = () => {
     updateEmployeeOnLoad();
 }
 
+function toggleButtons(toggleBool){
+    document.getElementById("viewEmployeeReimbursements").disabled = toggleBool;
+    document.getElementById("requestReimbursement").disabled = toggleBool;
+}
+
 function viewMyReimbursements(){
     console.log("viewMyReimbursements()");
     requesterId = sessionStorage.getItem("employeeUsername");
